@@ -6,8 +6,6 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Users, Expand, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import roomDeluxe1 from '@/assets/room-deluxe-1.jpg';
-import roomStandard1 from '@/assets/room-standard-1.jpg';
 
 interface RoomCategory {
   id: string;
@@ -27,7 +25,7 @@ const roomCategories: RoomCategory[] = [
     description: 'Spacious and elegantly designed rooms perfect for business travelers and couples seeking luxury.',
     basePrice: 8500,
     maxOccupancy: 2,
-    images: [roomDeluxe1],
+    images: ['/lovable-uploads/6867328d-5cf8-4d3a-bf21-dde09a477492.png', '/lovable-uploads/d24bc69f-aed9-48f9-b727-689a352ab799.png'],
     features: ['King Size Bed', 'Work Desk', 'City View', 'Premium Amenities'],
     badge: 'Most Popular'
   },
@@ -37,7 +35,7 @@ const roomCategories: RoomCategory[] = [
     description: 'Comfortable rooms with modern amenities and beautiful views of the surrounding area.',
     basePrice: 6500,
     maxOccupancy: 2,
-    images: [roomStandard1],
+    images: ['/lovable-uploads/8f796d5a-7cdc-4c0b-ba1d-11d64c1502ae.png'],
     features: ['Queen Size Bed', 'Sitting Area', 'Garden View', 'Modern Bathroom']
   },
   {
@@ -46,7 +44,7 @@ const roomCategories: RoomCategory[] = [
     description: 'Well-appointed rooms offering excellent value with all essential amenities.',
     basePrice: 4500,
     maxOccupancy: 2,
-    images: [roomStandard1],
+    images: ['/lovable-uploads/933f3573-c7b6-4257-89b9-16e4d552fd83.png'],
     features: ['Double Bed', 'En-suite Bathroom', 'Free WiFi', 'Air Conditioning']
   },
   {
@@ -55,7 +53,7 @@ const roomCategories: RoomCategory[] = [
     description: 'Spacious accommodations perfect for families with children.',
     basePrice: 9500,
     maxOccupancy: 4,
-    images: [roomDeluxe1],
+    images: ['/lovable-uploads/a6f12749-6cad-4807-bbe1-355c9210011b.png'],
     features: ['Multiple Beds', 'Extra Space', 'Child-Friendly', 'Family Amenities']
   }
 ];
