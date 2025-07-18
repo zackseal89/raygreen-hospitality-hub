@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
 import { Link } from 'react-router-dom';
+import { RoomGallery } from '@/components/rooms/RoomGallery';
 
 interface RoomType {
   id: string;
@@ -95,6 +96,9 @@ const Rooms = () => {
           </div>
         </div>
       </section>
+
+      {/* Room Gallery */}
+      <RoomGallery />
 
       {/* Room Types */}
       <section className="py-16 bg-background">
