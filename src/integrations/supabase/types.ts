@@ -14,7 +14,260 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      bookings: {
+        Row: {
+          adults: number
+          check_in_date: string
+          check_out_date: string
+          children: number
+          created_at: string
+          guest_email: string
+          guest_name: string
+          guest_phone: string | null
+          id: string
+          room_type_id: string
+          special_requests: string | null
+          status: string
+          stripe_session_id: string | null
+          total_price: number
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          adults?: number
+          check_in_date: string
+          check_out_date: string
+          children?: number
+          created_at?: string
+          guest_email: string
+          guest_name: string
+          guest_phone?: string | null
+          id?: string
+          room_type_id: string
+          special_requests?: string | null
+          status?: string
+          stripe_session_id?: string | null
+          total_price: number
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          adults?: number
+          check_in_date?: string
+          check_out_date?: string
+          children?: number
+          created_at?: string
+          guest_email?: string
+          guest_name?: string
+          guest_phone?: string | null
+          id?: string
+          room_type_id?: string
+          special_requests?: string | null
+          status?: string
+          stripe_session_id?: string | null
+          total_price?: number
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookings_room_type_id_fkey"
+            columns: ["room_type_id"]
+            isOneToOne: false
+            referencedRelation: "room_types"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      conference_bookings: {
+        Row: {
+          attendees: number
+          contact_email: string
+          contact_name: string
+          contact_phone: string | null
+          created_at: string
+          end_time: string
+          event_date: string
+          event_type: string | null
+          id: string
+          requirements: string | null
+          start_time: string
+          status: string
+          stripe_session_id: string | null
+          total_price: number | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          attendees: number
+          contact_email: string
+          contact_name: string
+          contact_phone?: string | null
+          created_at?: string
+          end_time: string
+          event_date: string
+          event_type?: string | null
+          id?: string
+          requirements?: string | null
+          start_time: string
+          status?: string
+          stripe_session_id?: string | null
+          total_price?: number | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          attendees?: number
+          contact_email?: string
+          contact_name?: string
+          contact_phone?: string | null
+          created_at?: string
+          end_time?: string
+          event_date?: string
+          event_type?: string | null
+          id?: string
+          requirements?: string | null
+          start_time?: string
+          status?: string
+          stripe_session_id?: string | null
+          total_price?: number | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      menu_items: {
+        Row: {
+          available: boolean | null
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          image_url: string | null
+          name: string
+          price: number
+          updated_at: string
+        }
+        Insert: {
+          available?: boolean | null
+          category: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          name: string
+          price: number
+          updated_at?: string
+        }
+        Update: {
+          available?: boolean | null
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          name?: string
+          price?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          full_name: string | null
+          id: string
+          phone: string | null
+          role: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          role?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          role?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      room_types: {
+        Row: {
+          amenities: string[] | null
+          base_price: number
+          created_at: string
+          description: string | null
+          id: string
+          image_url: string | null
+          max_occupancy: number
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          amenities?: string[] | null
+          base_price: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          max_occupancy: number
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          amenities?: string[] | null
+          base_price?: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          max_occupancy?: number
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      testimonials: {
+        Row: {
+          created_at: string
+          customer_name: string
+          id: string
+          is_featured: boolean | null
+          rating: number | null
+          review: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          customer_name: string
+          id?: string
+          is_featured?: boolean | null
+          rating?: number | null
+          review: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          customer_name?: string
+          id?: string
+          is_featured?: boolean | null
+          rating?: number | null
+          review?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
