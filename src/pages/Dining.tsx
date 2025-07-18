@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Clock, MapPin, Star, Utensils, Wine, Coffee, Sun } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
+import { FoodMenuGallery } from '@/components/dining/FoodMenuGallery';
 
 interface MenuItem {
   id: string;
@@ -186,6 +187,9 @@ const Dining = () => {
           </Card>
         </div>
       </section>
+
+      {/* Food Menu Gallery */}
+      <FoodMenuGallery />
 
       {/* Menu Section */}
       <section className="py-16 bg-muted/30">
