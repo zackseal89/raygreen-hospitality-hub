@@ -8,108 +8,140 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Hotel Green Theme - Core Colors */
-    --background: 120 15% 97%;
-    --foreground: 120 10% 15%;
-    --card: 120 20% 98%;
-    --card-foreground: 120 10% 15%;
-    --popover: 120 20% 98%;
-    --popover-foreground: 120 10% 15%;
+    /* Gen Z + Executive Color Palette */
+    --background: 120 15% 98%;
+    --foreground: 120 12% 12%;
+    --card: 120 25% 99%;
+    --card-foreground: 120 12% 12%;
+    --popover: 120 25% 99%;
+    --popover-foreground: 120 12% 12%;
     
-    /* Primary - Rich Forest Green */
-    --primary: 120 35% 25%;
+    /* Primary - Modern Forest Green with depth */
+    --primary: 120 40% 22%;
     --primary-foreground: 120 15% 98%;
     
-    /* Secondary - Warm Earth Tones */
-    --secondary: 30 20% 85%;
-    --secondary-foreground: 120 35% 25%;
+    /* Secondary - Contemporary Neutrals */
+    --secondary: 120 8% 92%;
+    --secondary-foreground: 120 40% 22%;
     
-    /* Muted - Soft Greens */
-    --muted: 120 20% 90%;
-    --muted-foreground: 120 15% 40%;
+    /* Muted - Soft, modern tones */
+    --muted: 120 15% 94%;
+    --muted-foreground: 120 12% 45%;
     
-    /* Accent - Gold/Yellow for luxury */
-    --accent: 45 85% 65%;
-    --accent-foreground: 120 35% 25%;
+    /* Accent - Vibrant Gold for Gen Z appeal */
+    --accent: 42 88% 58%;
+    --accent-foreground: 120 40% 22%;
     
     /* Supporting Colors */
     --destructive: 0 84% 60%;
     --destructive-foreground: 120 15% 98%;
-    --border: 120 20% 85%;
-    --input: 120 20% 90%;
-    --ring: 120 35% 25%;
+    --border: 120 15% 88%;
+    --input: 120 15% 96%;
+    --ring: 120 40% 22%;
 
-    --radius: 0.75rem;
+    --radius: 1rem;
 
     /* Sidebar Colors */
-    --sidebar-background: 120 20% 95%;
-    --sidebar-foreground: 120 15% 30%;
-    --sidebar-primary: 120 35% 25%;
+    --sidebar-background: 120 20% 97%;
+    --sidebar-foreground: 120 15% 25%;
+    --sidebar-primary: 120 40% 22%;
     --sidebar-primary-foreground: 120 15% 98%;
-    --sidebar-accent: 120 25% 88%;
-    --sidebar-accent-foreground: 120 35% 25%;
-    --sidebar-border: 120 20% 80%;
-    --sidebar-ring: 120 35% 25%;
+    --sidebar-accent: 120 20% 90%;
+    --sidebar-accent-foreground: 120 40% 22%;
+    --sidebar-border: 120 15% 85%;
+    --sidebar-ring: 120 40% 22%;
     
-    /* Hotel Brand Colors */
-    --hotel-green: 120 35% 25%;
-    --hotel-green-light: 120 25% 45%;
-    --hotel-green-lighter: 120 20% 85%;
-    --hotel-earth: 30 25% 60%;
-    --hotel-earth-light: 30 20% 85%;
-    --hotel-gold: 45 85% 65%;
-    --hotel-gold-light: 45 60% 80%;
+    /* Gen Z + Executive Brand Colors */
+    --hotel-green: 120 40% 22%;
+    --hotel-green-light: 120 35% 35%;
+    --hotel-green-lighter: 120 25% 88%;
+    --hotel-green-accent: 140 45% 25%;
+    --hotel-earth: 28 35% 55%;
+    --hotel-earth-light: 28 25% 82%;
+    --hotel-gold: 42 88% 58%;
+    --hotel-gold-light: 42 75% 75%;
+    --hotel-gold-accent: 38 92% 50%;
     
-    /* Gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(var(--hotel-green)), hsl(var(--hotel-green-light)));
-    --gradient-gold: linear-gradient(135deg, hsl(var(--hotel-gold)), hsl(var(--hotel-gold-light)));
+    /* Modern Neutrals for Gen Z aesthetic */
+    --neutral-100: 120 8% 96%;
+    --neutral-200: 120 6% 92%;
+    --neutral-300: 120 5% 85%;
+    --neutral-400: 120 4% 65%;
+    --neutral-500: 120 4% 45%;
+    --neutral-600: 120 5% 25%;
+    --neutral-700: 120 6% 15%;
+    --neutral-800: 120 8% 8%;
+    
+    /* Dynamic Gradients for modern appeal */
+    --gradient-hero: linear-gradient(135deg, hsl(var(--hotel-green)), hsl(var(--hotel-green-accent)));
+    --gradient-gold: linear-gradient(135deg, hsl(var(--hotel-gold)), hsl(var(--hotel-gold-accent)));
     --gradient-earth: linear-gradient(180deg, hsl(var(--hotel-earth-light)), hsl(var(--hotel-earth)));
+    --gradient-modern: linear-gradient(45deg, hsl(var(--hotel-green)), hsl(var(--hotel-gold)) 50%, hsl(var(--hotel-green-accent)));
+    --gradient-glass: linear-gradient(135deg, hsl(var(--background) / 0.8), hsl(var(--card) / 0.6));
     
-    /* Shadows */
-    --shadow-elegant: 0 10px 30px -10px hsl(var(--hotel-green) / 0.3);
-    --shadow-gold: 0 5px 20px hsl(var(--hotel-gold) / 0.2);
+    /* Enhanced Shadows for depth */
+    --shadow-elegant: 0 20px 50px -12px hsl(var(--hotel-green) / 0.25);
+    --shadow-gold: 0 8px 32px hsl(var(--hotel-gold) / 0.15);
+    --shadow-soft: 0 4px 20px hsl(var(--neutral-500) / 0.1);
+    --shadow-glow: 0 0 40px hsl(var(--hotel-gold) / 0.3);
     
-    /* Animations */
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Modern Animations */
+    --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    --transition-bounce: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .dark {
-    --background: 120 15% 8%;
-    --foreground: 120 15% 95%;
-    --card: 120 15% 10%;
-    --card-foreground: 120 15% 95%;
-    --popover: 120 15% 10%;
-    --popover-foreground: 120 15% 95%;
-    --primary: 120 25% 45%;
-    --primary-foreground: 120 15% 8%;
-    --secondary: 30 15% 20%;
-    --secondary-foreground: 120 15% 95%;
-    --muted: 120 15% 15%;
-    --muted-foreground: 120 10% 60%;
-    --accent: 45 75% 55%;
-    --accent-foreground: 120 15% 8%;
+    --background: 120 15% 6%;
+    --foreground: 120 15% 96%;
+    --card: 120 15% 8%;
+    --card-foreground: 120 15% 96%;
+    --popover: 120 15% 8%;
+    --popover-foreground: 120 15% 96%;
+    --primary: 120 35% 35%;
+    --primary-foreground: 120 15% 6%;
+    --secondary: 120 8% 15%;
+    --secondary-foreground: 120 15% 96%;
+    --muted: 120 12% 12%;
+    --muted-foreground: 120 10% 65%;
+    --accent: 42 85% 55%;
+    --accent-foreground: 120 15% 6%;
     --destructive: 0 62% 35%;
-    --destructive-foreground: 120 15% 95%;
-    --border: 120 15% 20%;
-    --input: 120 15% 15%;
-    --ring: 120 25% 45%;
-    --sidebar-background: 120 15% 10%;
+    --destructive-foreground: 120 15% 96%;
+    --border: 120 12% 18%;
+    --input: 120 12% 12%;
+    --ring: 120 35% 35%;
+    
+    /* Dark mode sidebar */
+    --sidebar-background: 120 15% 8%;
     --sidebar-foreground: 120 15% 85%;
-    --sidebar-primary: 120 25% 45%;
-    --sidebar-primary-foreground: 120 15% 8%;
-    --sidebar-accent: 120 15% 15%;
+    --sidebar-primary: 120 35% 35%;
+    --sidebar-primary-foreground: 120 15% 6%;
+    --sidebar-accent: 120 12% 15%;
     --sidebar-accent-foreground: 120 15% 85%;
-    --sidebar-border: 120 15% 20%;
-    --sidebar-ring: 120 25% 45%;
+    --sidebar-border: 120 12% 18%;
+    --sidebar-ring: 120 35% 35%;
     
     /* Dark mode hotel colors */
-    --hotel-green: 120 25% 45%;
-    --hotel-green-light: 120 20% 60%;
-    --hotel-green-lighter: 120 15% 25%;
-    --hotel-earth: 30 20% 40%;
-    --hotel-earth-light: 30 15% 25%;
-    --hotel-gold: 45 75% 55%;
-    --hotel-gold-light: 45 50% 70%;
+    --hotel-green: 120 35% 35%;
+    --hotel-green-light: 120 30% 50%;
+    --hotel-green-lighter: 120 15% 20%;
+    --hotel-green-accent: 140 40% 30%;
+    --hotel-earth: 28 30% 45%;
+    --hotel-earth-light: 28 20% 25%;
+    --hotel-gold: 42 85% 55%;
+    --hotel-gold-light: 42 70% 70%;
+    --hotel-gold-accent: 38 88% 48%;
+    
+    /* Dark mode neutrals */
+    --neutral-100: 120 8% 15%;
+    --neutral-200: 120 8% 18%;
+    --neutral-300: 120 6% 25%;
+    --neutral-400: 120 5% 45%;
+    --neutral-500: 120 4% 65%;
+    --neutral-600: 120 6% 80%;
+    --neutral-700: 120 8% 90%;
+    --neutral-800: 120 10% 96%;
   }
 }
 
@@ -119,6 +151,73 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-inter;
+    font-feature-settings: "cv11", "ss01";
+    font-variation-settings: "opsz" 32;
+  }
+  
+  /* Typography Classes for Gen Z + Executive */
+  .font-display {
+    font-family: 'Playfair Display', serif;
+    font-feature-settings: "ss01", "ss02";
+  }
+  
+  .font-inter {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-feature-settings: "cv11", "ss01";
+  }
+}
+
+@layer components {
+  /* Gen Z + Executive UI Components */
+  .btn-modern {
+    @apply relative overflow-hidden rounded-2xl px-8 py-4 font-semibold transition-all duration-300;
+    @apply bg-gradient-hero text-primary-foreground shadow-elegant;
+    @apply hover:shadow-glow hover:scale-[1.02] active:scale-[0.98];
+  }
+  
+  .btn-modern::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+  }
+  
+  .btn-modern:hover::before {
+    left: 100%;
+  }
+  
+  .card-modern {
+    @apply relative overflow-hidden rounded-3xl border-0 bg-card/60 backdrop-blur-md;
+    @apply shadow-soft transition-all duration-500;
+    @apply hover:shadow-elegant hover:-translate-y-2;
+  }
+  
+  .glass-effect {
+    @apply bg-gradient-glass backdrop-blur-xl border border-white/20;
+  }
+  
+  .text-gradient {
+    @apply bg-gradient-modern bg-clip-text text-transparent;
+  }
+  
+  .glow-effect {
+    @apply relative;
+  }
+  
+  .glow-effect::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    padding: 2px;
+    background: var(--gradient-modern);
+    border-radius: inherit;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: xor;
+    z-index: -1;
   }
 }
