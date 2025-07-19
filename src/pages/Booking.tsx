@@ -127,6 +127,10 @@ const Booking = () => {
     }
   };
 
+  const proceedToPayment = () => {
+    setBookingStep('payment');
+  };
+
   const onSubmit = async (data: BookingFormData) => {
     if (!selectedRoom) return;
 
@@ -146,23 +150,21 @@ const Booking = () => {
         status: 'pending',
       };
 
-      const { data: booking, error } = await supabase
-        .from('bookings')
-        .insert([bookingData])
-        .select()
-        .single();
+      const { data: response, error } = await supabase.functions.invoke('create-checkout', {
+        body: { bookingData }
+      });
 
       if (error) throw error;
 
-      toast({
-        title: "Booking Submitted!",
-        description: "Your booking has been submitted successfully. We'll contact you shortly to confirm.",
-      });
-
-      // Reset form
-      form.reset();
-      setSelectedRoom(null);
-      setBookingStep('dates');
+      if (response.url) {
+        // Open Stripe checkout in a new tab
+        window.open(response.url, '_blank');
+        
+        toast({
+          title: "Redirecting to Payment",
+          description: "Please complete your payment in the new tab that opened.",
+        });
+      }
       
     } catch (error) {
       console.error('Error creating booking:', error);
@@ -584,12 +586,120 @@ const Booking = () => {
                     Back to Rooms
                   </Button>
                   <Button 
-                    type="submit"
+                    type="button"
+                    onClick={proceedToPayment}
                     className="bg-gradient-hero hover:opacity-90 text-primary-foreground font-semibold px-8"
                   >
-                    Complete Booking
+                    Proceed to Payment
                   </Button>
                 </div>
+              </div>
+            )}
+
+            {/* Step 4: Payment */}
+            {bookingStep === 'payment' && selectedRoom && (
+              <div className="max-w-4xl mx-auto space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-center">Review & Pay</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid md:grid-cols-2 gap-8">
+                      {/* Booking Summary */}
+                      <div className="space-y-4">
+                        <h3 className="text-lg font-semibold text-primary">Booking Summary</h3>
+                        
+                        <div className="bg-muted p-4 rounded-lg space-y-3">
+                          <div className="flex justify-between">
+                            <span className="font-medium">Room:</span>
+                            <span>{selectedRoom.name}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="font-medium">Check-in:</span>
+                            <span>{format(form.getValues('checkIn'), 'MMM dd, yyyy')}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="font-medium">Check-out:</span>
+                            <span>{format(form.getValues('checkOut'), 'MMM dd, yyyy')}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="font-medium">Guests:</span>
+                            <span>
+                              {form.getValues('adults')} Adult{form.getValues('adults') > 1 ? 's' : ''}
+                              {form.getValues('children') > 0 && `, ${form.getValues('children')} Child${form.getValues('children') > 1 ? 'ren' : ''}`}
+                            </span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="font-medium">Nights:</span>
+                            <span>{differenceInDays(form.getValues('checkOut'), form.getValues('checkIn'))}</span>
+                          </div>
+                          <div className="border-t pt-3 flex justify-between text-lg font-bold">
+                            <span>Total:</span>
+                            <span className="text-hotel-green">{formatPrice(totalPrice)}</span>
+                          </div>
+                          <div className="text-xs text-muted-foreground">
+                            *Payment will be processed in USD (approximately ${Math.round(totalPrice / 130)})
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Guest Information */}
+                      <div className="space-y-4">
+                        <h3 className="text-lg font-semibold text-primary">Guest Information</h3>
+                        
+                        <div className="bg-muted p-4 rounded-lg space-y-3">
+                          <div className="flex justify-between">
+                            <span className="font-medium">Name:</span>
+                            <span>{form.getValues('guestName')}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="font-medium">Email:</span>
+                            <span>{form.getValues('guestEmail')}</span>
+                          </div>
+                          {form.getValues('guestPhone') && (
+                            <div className="flex justify-between">
+                              <span className="font-medium">Phone:</span>
+                              <span>{form.getValues('guestPhone')}</span>
+                            </div>
+                          )}
+                          {form.getValues('specialRequests') && (
+                            <div>
+                              <span className="font-medium">Special Requests:</span>
+                              <p className="text-sm mt-1">{form.getValues('specialRequests')}</p>
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="bg-hotel-green/10 p-4 rounded-lg">
+                          <div className="flex items-center space-x-2 mb-2">
+                            <CreditCard className="h-4 w-4 text-hotel-green" />
+                            <span className="font-medium text-hotel-green">Secure Payment</span>
+                          </div>
+                          <p className="text-xs text-muted-foreground">
+                            Your payment is secured by Stripe. We accept all major credit cards.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex justify-between mt-8">
+                      <Button 
+                        type="button" 
+                        variant="outline"
+                        onClick={() => setBookingStep('details')}
+                      >
+                        Back to Details
+                      </Button>
+                      <Button 
+                        type="submit"
+                        className="bg-gradient-hero hover:opacity-90 text-primary-foreground font-semibold px-8"
+                      >
+                        <CreditCard className="h-4 w-4 mr-2" />
+                        Pay Now
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
               </div>
             )}
           </form>
