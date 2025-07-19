@@ -40,6 +40,15 @@ serve(async (req) => {
 
     if (bookingError) throw bookingError;
 
+    // Get room type details for email
+    const { data: roomType, error: roomError } = await supabaseClient
+      .from("room_types")
+      .select("name")
+      .eq("id", bookingData.room_type_id)
+      .single();
+
+    if (roomError) throw roomError;
+
     // Convert KES to USD for Stripe (approximate rate: 1 USD = 130 KES)
     const usdAmount = Math.round((bookingData.total_price / 130) * 100); // Convert to cents
 
@@ -52,7 +61,7 @@ serve(async (req) => {
             currency: "usd",
             product_data: {
               name: `Hotel Booking - ${bookingData.guest_name}`,
-              description: `Booking from ${bookingData.check_in_date} to ${bookingData.check_out_date}`,
+              description: `${roomType.name} from ${bookingData.check_in_date} to ${bookingData.check_out_date}`,
             },
             unit_amount: usdAmount,
           },
@@ -72,6 +81,33 @@ serve(async (req) => {
       .from("bookings")
       .update({ stripe_session_id: session.id })
       .eq("id", booking.id);
+
+    // Send booking confirmation email
+    try {
+      await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/send-booking-confirmation`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${Deno.env.get("SUPABASE_ANON_KEY")}`,
+        },
+        body: JSON.stringify({
+          guestName: bookingData.guest_name,
+          guestEmail: bookingData.guest_email,
+          roomName: roomType.name,
+          checkInDate: bookingData.check_in_date,
+          checkOutDate: bookingData.check_out_date,
+          adults: bookingData.adults,
+          children: bookingData.children,
+          totalPrice: bookingData.total_price,
+          bookingId: booking.id,
+          specialRequests: bookingData.special_requests,
+        }),
+      });
+      console.log("Booking confirmation email sent successfully");
+    } catch (emailError) {
+      console.error("Failed to send confirmation email:", emailError);
+      // Don't fail the whole booking if email fails
+    }
 
     return new Response(
       JSON.stringify({ 

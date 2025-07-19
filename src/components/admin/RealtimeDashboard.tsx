@@ -28,10 +28,28 @@ export const RealtimeDashboard = () => {
   const { data: bookings } = useRealtimeData({
     table: 'bookings',
     onInsert: (payload) => {
-      toast.success(`New booking received from ${payload.new.guest_name}`)
+      const booking = payload.new
+      toast.success(
+        `🎉 New booking received!`,
+        {
+          description: `${booking.guest_name} booked for ${booking.check_in_date} - Total: KES ${Number(booking.total_price).toLocaleString()}`,
+          duration: 8000,
+        }
+      )
     },
     onUpdate: (payload) => {
-      toast.info(`Booking status updated: ${payload.new.status}`)
+      const booking = payload.new
+      if (booking.status === 'confirmed') {
+        toast.success(
+          `✅ Booking confirmed!`,
+          {
+            description: `${booking.guest_name}'s booking has been confirmed`,
+            duration: 5000,
+          }
+        )
+      } else {
+        toast.info(`📝 Booking status updated: ${booking.status}`)
+      }
     }
   })
 
@@ -126,7 +144,7 @@ export const RealtimeDashboard = () => {
             <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${stats.totalRevenue.toFixed(2)}</div>
+            <div className="text-2xl font-bold">KES {stats.totalRevenue.toLocaleString()}</div>
             <p className="text-xs text-muted-foreground">From confirmed bookings</p>
           </CardContent>
         </Card>
@@ -186,10 +204,19 @@ export const RealtimeDashboard = () => {
         <CardContent>
           <div className="space-y-4">
             {bookings.slice(0, 5).map((booking: any) => (
-              <div key={booking.id} className="flex items-center justify-between">
-                <div>
-                  <p className="font-medium">{booking.guest_name}</p>
+              <div key={booking.id} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-1">
+                    <p className="font-medium">{booking.guest_name}</p>
+                    <Badge variant="outline" className="text-xs">
+                      {booking.adults} Guest{booking.adults > 1 ? 's' : ''}
+                      {booking.children > 0 && ` + ${booking.children} Child${booking.children > 1 ? 'ren' : ''}`}
+                    </Badge>
+                  </div>
                   <p className="text-sm text-muted-foreground">{booking.guest_email}</p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {booking.check_in_date} → {booking.check_out_date}
+                  </p>
                 </div>
                 <div className="text-right">
                   <Badge variant={
@@ -198,12 +225,20 @@ export const RealtimeDashboard = () => {
                   }>
                     {booking.status}
                   </Badge>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    ${Number(booking.total_price).toFixed(2)}
+                  <p className="text-sm font-semibold mt-1">
+                    KES {Number(booking.total_price).toLocaleString()}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {new Date(booking.created_at).toLocaleDateString()}
                   </p>
                 </div>
               </div>
             ))}
+            {bookings.length === 0 && (
+              <div className="text-center py-8 text-muted-foreground">
+                <p>No bookings yet. They will appear here in real-time!</p>
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>
