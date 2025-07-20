@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
+import { useNavigate } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
 import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
@@ -14,11 +15,12 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { CalendarIcon, Users, Bed, CheckCircle, CreditCard } from 'lucide-react';
+import { CalendarIcon, Users, Bed, CheckCircle, CreditCard, LogIn } from 'lucide-react';
 import { format, addDays, differenceInDays } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/hooks/useAuth';
 
 interface RoomType {
   id: string;
@@ -53,11 +55,14 @@ const bookingSchema = z.object({
 type BookingFormData = z.infer<typeof bookingSchema>;
 
 const Booking = () => {
+  const { user, loading: authLoading } = useAuth();
+  const navigate = useNavigate();
   const [roomTypes, setRoomTypes] = useState<RoomType[]>([]);
   const [selectedRoom, setSelectedRoom] = useState<RoomType | null>(null);
   const [loading, setLoading] = useState(true);
   const [bookingStep, setBookingStep] = useState<'dates' | 'rooms' | 'details' | 'payment'>('dates');
   const [totalPrice, setTotalPrice] = useState(0);
+  const [existingBookings, setExistingBookings] = useState<any[]>([]);
   const { toast } = useToast();
 
   const form = useForm<BookingFormData>({
@@ -132,7 +137,15 @@ const Booking = () => {
   };
 
   const onSubmit = async (data: BookingFormData) => {
-    if (!selectedRoom) return;
+    if (!selectedRoom || !user) {
+      toast({
+        title: "Authentication Required",
+        description: "Please log in to complete your booking.",
+        variant: "destructive",
+      });
+      navigate('/auth');
+      return;
+    }
 
     try {
       const nights = differenceInDays(data.checkOut, data.checkIn);
@@ -148,13 +161,25 @@ const Booking = () => {
         special_requests: data.specialRequests || null,
         total_price: totalPrice,
         status: 'pending',
+        user_id: user.id, // Associate booking with authenticated user
       };
 
       const { data: response, error } = await supabase.functions.invoke('create-checkout', {
         body: { bookingData }
       });
 
-      if (error) throw error;
+      if (error) {
+        if (error.message?.includes('already have a booking')) {
+          toast({
+            title: "Duplicate Booking",
+            description: "You already have a booking for these dates. Please check your existing bookings.",
+            variant: "destructive",
+          });
+          navigate('/my-bookings');
+          return;
+        }
+        throw error;
+      }
 
       if (response.url) {
         // Open Stripe checkout in a new tab
@@ -176,7 +201,36 @@ const Booking = () => {
     }
   };
 
-  if (loading) {
+  // Show authentication prompt if not logged in
+  if (!authLoading && !user) {
+    return (
+      <Layout>
+        <div className="container mx-auto px-4 py-16">
+          <Card className="max-w-md mx-auto">
+            <CardHeader>
+              <CardTitle className="text-center flex items-center justify-center gap-2">
+                <LogIn className="h-5 w-5" />
+                Login Required
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="text-center space-y-4">
+              <p className="text-muted-foreground">
+                You need to be logged in to make a booking. This helps us prevent duplicate bookings and manage your reservations.
+              </p>
+              <Button 
+                onClick={() => navigate('/auth')}
+                className="bg-gradient-hero hover:opacity-90 text-primary-foreground font-semibold"
+              >
+                Login or Sign Up
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (loading || authLoading) {
     return (
       <Layout>
         <div className="container mx-auto px-4 py-16">

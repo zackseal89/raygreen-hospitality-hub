@@ -273,9 +273,17 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      cleanup_expired_bookings: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       get_current_user_role: {
         Args: Record<PropertyKey, never>
         Returns: string
+      }
+      update_booking_status: {
+        Args: { booking_id: string; new_status: string; admin_user_id?: string }
+        Returns: undefined
       }
     }
     Enums: {

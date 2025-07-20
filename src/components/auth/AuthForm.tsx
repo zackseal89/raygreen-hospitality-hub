@@ -1,247 +1,252 @@
-import { useState } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { supabase } from '@/integrations/supabase/client'
-import { toast } from 'sonner'
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { useNavigate } from 'react-router-dom';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
+import { LogIn, UserPlus } from 'lucide-react';
+
+const authSchema = z.object({
+  email: z.string().email('Please enter a valid email address'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+  confirmPassword: z.string().optional(),
+}).refine((data) => {
+  if (data.confirmPassword !== undefined) {
+    return data.password === data.confirmPassword;
+  }
+  return true;
+}, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
+});
+
+type AuthFormData = z.infer<typeof authSchema>;
 
 interface AuthFormProps {
-  onSuccess?: () => void
+  redirectTo?: string;
 }
 
-export const AuthForm = ({ onSuccess }: AuthFormProps) => {
-  const [loading, setLoading] = useState(false)
-  const [loginData, setLoginData] = useState({ email: '', password: '' })
-  const [signupData, setSignupData] = useState({ 
-    email: '', 
-    password: '', 
-    confirmPassword: '',
-    fullName: ''
-  })
+const AuthForm = ({ redirectTo = '/' }: AuthFormProps) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState('login');
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
+  const form = useForm<AuthFormData>({
+    resolver: zodResolver(authSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+      confirmPassword: '',
+    },
+  });
 
-    try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: loginData.email,
-        password: loginData.password
-      })
-
-      if (error) {
-        if (error.message.includes('Invalid login credentials')) {
-          toast.error('Invalid email or password')
-        } else if (error.message.includes('Email not confirmed')) {
-          toast.error('Please check your email and confirm your account')
-        } else {
-          toast.error(error.message)
-        }
-        return
-      }
-
-      if (data.user) {
-        // Check if user has admin role
-        const { data: profile, error: profileError } = await supabase
-          .from('profiles')
-          .select('role')
-          .eq('user_id', data.user.id)
-          .single()
-
-        if (profileError) {
-          console.error('Profile check error:', profileError)
-          toast.error('Unable to verify admin access')
-          await supabase.auth.signOut()
-          return
-        }
-
-        if (profile?.role !== 'admin') {
-          toast.error('Access denied. Admin privileges required.')
-          await supabase.auth.signOut()
-          return
-        }
-
-        toast.success('Admin login successful!')
-        onSuccess?.()
-      }
-    } catch (error) {
-      toast.error('An unexpected error occurred')
-      console.error('Login error:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleSignup = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const onSubmit = async (data: AuthFormData) => {
+    setIsLoading(true);
     
-    if (signupData.password !== signupData.confirmPassword) {
-      toast.error('Passwords do not match')
-      return
-    }
-
-    if (signupData.password.length < 6) {
-      toast.error('Password must be at least 6 characters')
-      return
-    }
-
-    setLoading(true)
-
     try {
-      const redirectUrl = `${window.location.origin}/admin`
-      
-      const { data, error } = await supabase.auth.signUp({
-        email: signupData.email,
-        password: signupData.password,
-        options: {
-          emailRedirectTo: redirectUrl,
-          data: {
-            full_name: signupData.fullName
+      if (activeTab === 'login') {
+        const { error } = await supabase.auth.signInWithPassword({
+          email: data.email,
+          password: data.password,
+        });
+
+        if (error) throw error;
+
+        toast({
+          title: "Welcome back!",
+          description: "You have successfully logged in.",
+        });
+        
+        navigate(redirectTo);
+      } else {
+        const { error } = await supabase.auth.signUp({
+          email: data.email,
+          password: data.password,
+          options: {
+            emailRedirectTo: `${window.location.origin}${redirectTo}`
           }
-        }
-      })
+        });
 
-      if (error) {
-        if (error.message.includes('User already registered')) {
-          toast.error('An account with this email already exists. Please sign in instead.')
-        } else {
-          toast.error(error.message)
-        }
-        return
+        if (error) throw error;
+
+        toast({
+          title: "Account created!",
+          description: "Please check your email to verify your account.",
+        });
       }
-
-      if (data.user && !data.session) {
-        toast.success('Please check your email and click the confirmation link to complete registration.')
-      } else if (data.user && data.session) {
-        // Create profile with guest role (admin will need to be assigned manually)
-        const { error: profileError } = await supabase
-          .from('profiles')
-          .insert({
-            user_id: data.user.id,
-            full_name: signupData.fullName,
-            role: 'guest' // Default role, admin needs to be assigned manually
-          })
-
-        if (profileError) {
-          console.error('Profile creation error:', profileError)
-        }
-
-        toast.info('Account created! Contact an administrator to grant admin access.')
-        onSuccess?.()
+    } catch (error: any) {
+      console.error('Auth error:', error);
+      
+      let errorMessage = "An unexpected error occurred. Please try again.";
+      
+      if (error.message?.includes('Invalid login credentials')) {
+        errorMessage = "Invalid email or password. Please check your credentials.";
+      } else if (error.message?.includes('User already registered')) {
+        errorMessage = "An account with this email already exists. Please try logging in instead.";
+        setActiveTab('login');
+      } else if (error.message?.includes('Email not confirmed')) {
+        errorMessage = "Please check your email and click the confirmation link before logging in.";
       }
-    } catch (error) {
-      toast.error('An unexpected error occurred')
-      console.error('Signup error:', error)
+      
+      toast({
+        title: activeTab === 'login' ? "Login Failed" : "Sign Up Failed",
+        description: errorMessage,
+        variant: "destructive",
+      });
     } finally {
-      setLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-primary/5 to-secondary/5">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">Admin Portal</CardTitle>
-          <CardDescription>
-            Sign in to access the admin dashboard
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Tabs defaultValue="login" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="login">Sign In</TabsTrigger>
-              <TabsTrigger value="signup">Sign Up</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="login">
-              <form onSubmit={handleLogin} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="login-email">Email</Label>
-                  <Input
-                    id="login-email"
-                    type="email"
-                    placeholder="admin@example.com"
-                    value={loginData.email}
-                    onChange={(e) => setLoginData(prev => ({ ...prev, email: e.target.value }))}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="login-password">Password</Label>
-                  <Input
-                    id="login-password"
-                    type="password"
-                    placeholder="Enter your password"
-                    value={loginData.password}
-                    onChange={(e) => setLoginData(prev => ({ ...prev, password: e.target.value }))}
-                    required
-                  />
-                </div>
-                <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? 'Signing in...' : 'Sign In'}
+    <Card className="w-full max-w-md mx-auto">
+      <CardHeader>
+        <CardTitle className="text-center text-2xl">
+          Welcome to Raygreen Hotel
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="login" className="flex items-center gap-2">
+              <LogIn className="h-4 w-4" />
+              Login
+            </TabsTrigger>
+            <TabsTrigger value="signup" className="flex items-center gap-2">
+              <UserPlus className="h-4 w-4" />
+              Sign Up
+            </TabsTrigger>
+          </TabsList>
+
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mt-6">
+              <TabsContent value="login" className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email Address</FormLabel>
+                      <FormControl>
+                        <Input 
+                          type="email" 
+                          placeholder="Enter your email" 
+                          {...field} 
+                          disabled={isLoading}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <Input 
+                          type="password" 
+                          placeholder="Enter your password" 
+                          {...field} 
+                          disabled={isLoading}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <Button 
+                  type="submit" 
+                  className="w-full bg-gradient-hero hover:opacity-90 text-primary-foreground"
+                  disabled={isLoading}
+                >
+                  {isLoading ? 'Signing in...' : 'Sign In'}
                 </Button>
-              </form>
-            </TabsContent>
-            
-            <TabsContent value="signup">
-              <form onSubmit={handleSignup} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="signup-name">Full Name</Label>
-                  <Input
-                    id="signup-name"
-                    type="text"
-                    placeholder="John Doe"
-                    value={signupData.fullName}
-                    onChange={(e) => setSignupData(prev => ({ ...prev, fullName: e.target.value }))}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="signup-email">Email</Label>
-                  <Input
-                    id="signup-email"
-                    type="email"
-                    placeholder="admin@example.com"
-                    value={signupData.email}
-                    onChange={(e) => setSignupData(prev => ({ ...prev, email: e.target.value }))}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="signup-password">Password</Label>
-                  <Input
-                    id="signup-password"
-                    type="password"
-                    placeholder="Create a password"
-                    value={signupData.password}
-                    onChange={(e) => setSignupData(prev => ({ ...prev, password: e.target.value }))}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="confirm-password">Confirm Password</Label>
-                  <Input
-                    id="confirm-password"
-                    type="password"
-                    placeholder="Confirm your password"
-                    value={signupData.confirmPassword}
-                    onChange={(e) => setSignupData(prev => ({ ...prev, confirmPassword: e.target.value }))}
-                    required
-                  />
-                </div>
-                <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? 'Creating account...' : 'Create Account'}
+              </TabsContent>
+
+              <TabsContent value="signup" className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email Address</FormLabel>
+                      <FormControl>
+                        <Input 
+                          type="email" 
+                          placeholder="Enter your email" 
+                          {...field} 
+                          disabled={isLoading}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <Input 
+                          type="password" 
+                          placeholder="Choose a password (min. 6 characters)" 
+                          {...field} 
+                          disabled={isLoading}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="confirmPassword"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Confirm Password</FormLabel>
+                      <FormControl>
+                        <Input 
+                          type="password" 
+                          placeholder="Confirm your password" 
+                          {...field} 
+                          disabled={isLoading}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <Button 
+                  type="submit" 
+                  className="w-full bg-gradient-hero hover:opacity-90 text-primary-foreground"
+                  disabled={isLoading}
+                >
+                  {isLoading ? 'Creating account...' : 'Create Account'}
                 </Button>
-                <p className="text-xs text-muted-foreground text-center">
-                  Note: Admin access must be granted by an existing administrator
-                </p>
-              </form>
-            </TabsContent>
-          </Tabs>
-        </CardContent>
-      </Card>
-    </div>
-  )
-}
+              </TabsContent>
+            </form>
+          </Form>
+        </Tabs>
+      </CardContent>
+    </Card>
+  );
+};
+
+export default AuthForm;

@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { AuthForm } from '@/components/auth/AuthForm'
+import AuthForm from '@/components/auth/AuthForm'
 import { useAuth } from '@/hooks/useAuth'
 
 const AdminAuth = () => {
@@ -39,7 +39,7 @@ const AdminAuth = () => {
     )
   }
 
-  return <AuthForm onSuccess={handleAuthSuccess} />
+  return <AuthForm redirectTo="/admin" />
 }
 
 export default AdminAuth

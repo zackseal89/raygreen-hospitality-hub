@@ -11,6 +11,8 @@ import Rooms from "./pages/Rooms";
 import Facilities from "./pages/Facilities";
 import Dining from "./pages/Dining";
 import Booking from "./pages/Booking";
+import MyBookings from "./pages/MyBookings";
+import Auth from "./pages/Auth";
 import Contact from "./pages/Contact";
 import Admin from "./pages/Admin";
 import AdminAuth from "./pages/AdminAuth";
@@ -33,6 +35,8 @@ const App = () => (
           <Route path="/facilities" element={<Facilities />} />
           <Route path="/dining" element={<Dining />} />
           <Route path="/booking" element={<Booking />} />
+          <Route path="/my-bookings" element={<MyBookings />} />
+          <Route path="/auth" element={<Auth />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/booking-success" element={<BookingSuccess />} />
           <Route path="/admin" element={<Admin />} />
