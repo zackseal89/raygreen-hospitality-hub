@@ -163,7 +163,7 @@ export const ExternalPortalDemo = () => {
     }
   }
 
-  const handleDeleteItem = async (table: string, id: string) => {
+  const handleDeleteItem = async (table: 'bookings' | 'room_types' | 'menu_items', id: string) => {
     try {
       const { error } = await supabase
         .from(table)

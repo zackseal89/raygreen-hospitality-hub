@@ -141,16 +141,8 @@ export const useExternalPortalSync = () => {
     try {
       setSyncStatus('syncing')
       
-      // Log to audit table
-      await supabase
-        .from('audit_logs')
-        .insert({
-          table_name: table,
-          operation: operation,
-          new_data: data,
-          source: 'admin_panel',
-          external_portal_user: 'Admin User'
-        })
+      // Log activity to console for now (since audit_logs table doesn't exist)
+      console.log('Admin activity:', { table, operation, data, timestamp: new Date() })
 
       setSyncStatus('connected')
       setLastSync(new Date())
