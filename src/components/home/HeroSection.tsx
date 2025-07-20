@@ -82,26 +82,26 @@ const HeroSection = () => {
                 
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                      <label className="text-xs lg:text-sm font-semibold text-hotel-green">Check-in</label>
+                     <div>
+                      <label className="text-sm font-bold text-hotel-green mb-1 block">Check-in</label>
                       <div className="relative">
                         <input 
                           type="date" 
-                          className="w-full p-2 lg:p-3 border rounded-lg focus:ring-2 focus:ring-hotel-green focus:border-transparent text-sm"
+                          className="w-full p-3 border-2 border-hotel-green/30 rounded-lg focus:ring-2 focus:ring-hotel-green focus:border-hotel-green text-sm font-medium bg-white"
                           min={new Date().toISOString().split('T')[0]}
                         />
-                        <Calendar className="absolute right-2 lg:right-3 top-2 lg:top-3 h-4 w-4 lg:h-5 lg:w-5 text-muted-foreground pointer-events-none" />
+                        <Calendar className="absolute right-3 top-3 h-5 w-5 text-hotel-green pointer-events-none" />
                       </div>
                     </div>
                     <div>
-                      <label className="text-xs lg:text-sm font-semibold text-hotel-green">Check-out</label>
+                      <label className="text-sm font-bold text-hotel-green mb-1 block">Check-out</label>
                       <div className="relative">
                         <input 
                           type="date" 
-                          className="w-full p-2 lg:p-3 border rounded-lg focus:ring-2 focus:ring-hotel-green focus:border-transparent text-sm"
+                          className="w-full p-3 border-2 border-hotel-green/30 rounded-lg focus:ring-2 focus:ring-hotel-green focus:border-hotel-green text-sm font-medium bg-white"
                           min={new Date().toISOString().split('T')[0]}
                         />
-                        <Calendar className="absolute right-2 lg:right-3 top-2 lg:top-3 h-4 w-4 lg:h-5 lg:w-5 text-muted-foreground pointer-events-none" />
+                        <Calendar className="absolute right-3 top-3 h-5 w-5 text-hotel-green pointer-events-none" />
                       </div>
                     </div>
                   </div>

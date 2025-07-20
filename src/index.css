@@ -51,16 +51,16 @@ All colors MUST be HSL.
     --sidebar-border: 120 15% 85%;
     --sidebar-ring: 120 40% 22%;
     
-    /* Gen Z + Executive Brand Colors */
-    --hotel-green: 140 25% 45%;
-    --hotel-green-light: 140 30% 55%;
-    --hotel-green-lighter: 140 20% 88%;
-    --hotel-green-accent: 140 35% 35%;
-    --hotel-earth: 28 35% 55%;
-    --hotel-earth-light: 28 25% 82%;
-    --hotel-gold: 42 88% 58%;
-    --hotel-gold-light: 42 75% 75%;
-    --hotel-gold-accent: 38 92% 50%;
+    /* Gen Z + Executive Brand Colors - Enhanced Contrast */
+    --hotel-green: 140 50% 25%;
+    --hotel-green-light: 140 45% 35%;
+    --hotel-green-lighter: 140 30% 85%;
+    --hotel-green-accent: 140 55% 20%;
+    --hotel-earth: 28 45% 45%;
+    --hotel-earth-light: 28 35% 75%;
+    --hotel-gold: 42 95% 65%;
+    --hotel-gold-light: 42 85% 80%;
+    --hotel-gold-accent: 38 100% 55%;
     
     /* Modern Neutrals for Gen Z aesthetic */
     --neutral-100: 120 8% 96%;

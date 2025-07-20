@@ -5,7 +5,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-primary text-primary-foreground mt-auto">
+    <footer className="bg-hotel-green text-white mt-auto">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Hotel Info */}
@@ -19,7 +19,7 @@ const Footer = () => {
                 <p className="text-sm text-hotel-gold">Best African Hospitality</p>
               </div>
             </div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-white/90">
               Welcome to Raygreen Hotel, where luxury meets comfort. We offer a serene escape from the hustle and bustle of the city.
             </p>
           </div>
@@ -39,7 +39,7 @@ const Footer = () => {
                 <li key={link.name}>
                   <Link 
                     to={link.href} 
-                    className="text-sm hover:text-hotel-gold transition-colors"
+                    className="text-sm text-white/90 hover:text-hotel-gold transition-colors font-medium"
                   >
                     {link.name}
                   </Link>
@@ -54,19 +54,19 @@ const Footer = () => {
             <div className="space-y-3">
               <div className="flex items-start space-x-3">
                 <MapPin className="h-5 w-5 text-hotel-gold mt-0.5 flex-shrink-0" />
-                <div className="text-sm">
-                  <p>Raygreen Hotel</p>
+                <div className="text-sm text-white/90">
+                  <p className="font-medium text-white">Raygreen Hotel</p>
                   <p>Nyamasaria Off Kisumu Nairobi Road</p>
                   <p>Milimani, Kisumu, Kenya</p>
                 </div>
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="h-5 w-5 text-hotel-gold" />
-                <span className="text-sm">+254 XXX XXX XXX</span>
+                <span className="text-sm text-white/90 font-medium">+254 XXX XXX XXX</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="h-5 w-5 text-hotel-gold" />
-                <span className="text-sm">info@raygreenhotel.com</span>
+                <span className="text-sm text-white/90 font-medium">info@raygreenhotel.com</span>
               </div>
             </div>
           </div>
@@ -76,16 +76,16 @@ const Footer = () => {
             <h4 className="text-lg font-semibold text-hotel-gold">Business Hours</h4>
             <div className="space-y-2 text-sm">
               <div>
-                <p className="font-medium">Front Desk</p>
-                <p>24 Hours</p>
+                <p className="font-semibold text-white">Front Desk</p>
+                <p className="text-white/90">24 Hours</p>
               </div>
               <div>
-                <p className="font-medium">Restaurant</p>
-                <p>6:00 AM - 10:00 PM</p>
+                <p className="font-semibold text-white">Restaurant</p>
+                <p className="text-white/90">6:00 AM - 10:00 PM</p>
               </div>
               <div>
-                <p className="font-medium">Rooftop Bar</p>
-                <p>5:00 PM - 12:00 AM</p>
+                <p className="font-semibold text-white">Rooftop Bar</p>
+                <p className="text-white/90">5:00 PM - 12:00 AM</p>
               </div>
             </div>
             
@@ -120,8 +120,8 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-primary-foreground/20 mt-8 pt-8 text-center">
-          <p className="text-sm">
+        <div className="border-t border-white/20 mt-8 pt-8 text-center">
+          <p className="text-sm text-white/90 font-medium">
             © {currentYear} Raygreen Hotel. All rights reserved.
           </p>
         </div>
