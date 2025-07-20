@@ -55,7 +55,6 @@ const bookingSchema = z.object({
 type BookingFormData = z.infer<typeof bookingSchema>;
 
 const Booking = () => {
-  const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [roomTypes, setRoomTypes] = useState<RoomType[]>([]);
   const [selectedRoom, setSelectedRoom] = useState<RoomType | null>(null);
@@ -137,17 +136,17 @@ const Booking = () => {
   };
 
   const onSubmit = async (data: BookingFormData) => {
-    if (!selectedRoom || !user) {
+    if (!selectedRoom) {
       toast({
-        title: "Authentication Required",
-        description: "Please log in to complete your booking.",
+        title: "Error",
+        description: "Please select a room first.",
         variant: "destructive",
       });
-      navigate('/auth');
       return;
     }
 
     try {
+      setLoading(true);
       const nights = differenceInDays(data.checkOut, data.checkIn);
       const bookingData = {
         room_type_id: selectedRoom.id,
@@ -161,7 +160,7 @@ const Booking = () => {
         special_requests: data.specialRequests || null,
         total_price: totalPrice,
         status: 'pending',
-        user_id: user.id, // Associate booking with authenticated user
+        user_id: null, // Guest booking without authentication
       };
 
       const { data: response, error } = await supabase.functions.invoke('create-checkout', {
@@ -172,10 +171,9 @@ const Booking = () => {
         if (error.message?.includes('already have a booking')) {
           toast({
             title: "Duplicate Booking",
-            description: "You already have a booking for these dates. Please check your existing bookings.",
+            description: "You already have a booking for these dates. Please check your email for existing bookings.",
             variant: "destructive",
           });
-          navigate('/my-bookings');
           return;
         }
         throw error;
@@ -198,39 +196,12 @@ const Booking = () => {
         description: "There was an error processing your booking. Please try again.",
         variant: "destructive",
       });
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Show authentication prompt if not logged in
-  if (!authLoading && !user) {
-    return (
-      <Layout>
-        <div className="container mx-auto px-4 py-16">
-          <Card className="max-w-md mx-auto">
-            <CardHeader>
-              <CardTitle className="text-center flex items-center justify-center gap-2">
-                <LogIn className="h-5 w-5" />
-                Login Required
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="text-center space-y-4">
-              <p className="text-muted-foreground">
-                You need to be logged in to make a booking. This helps us prevent duplicate bookings and manage your reservations.
-              </p>
-              <Button 
-                onClick={() => navigate('/auth')}
-                className="bg-gradient-hero hover:opacity-90 text-primary-foreground font-semibold"
-              >
-                Login or Sign Up
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-      </Layout>
-    );
-  }
-
-  if (loading || authLoading) {
+  if (loading) {
     return (
       <Layout>
         <div className="container mx-auto px-4 py-16">

@@ -1,6 +1,8 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { RealtimeDashboard } from '@/components/admin/RealtimeDashboard'
+import { ExternalPortalDemo } from '@/components/admin/ExternalPortalDemo'
+import BookingManagement from '@/components/admin/BookingManagement'
 import Layout from '@/components/layout/Layout'
 import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/components/ui/button'
@@ -12,7 +14,7 @@ const Admin = () => {
   useEffect(() => {
     // Redirect to auth page if not authenticated or not admin
     if (!loading && (!user || userRole !== 'admin')) {
-      navigate('/admin/auth', { replace: true })
+      navigate('/admin-auth', { replace: true })
     }
   }, [user, userRole, loading, navigate])
 
@@ -47,7 +49,12 @@ const Admin = () => {
             Sign Out
           </Button>
         </div>
-        <RealtimeDashboard />
+        
+        <div className="space-y-8">
+          <BookingManagement />
+          <RealtimeDashboard />
+          <ExternalPortalDemo />
+        </div>
       </div>
     </Layout>
   )
