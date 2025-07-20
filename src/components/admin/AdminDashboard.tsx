@@ -18,7 +18,7 @@ const AdminDashboard = () => {
         .from('bookings')
         .select(`
           *,
-          room_types (name)
+          room_types (*)
         `)
         .order('created_at', { ascending: false })
 
@@ -56,6 +56,7 @@ const AdminDashboard = () => {
   })
 
   if (bookingsError) {
+    console.error("Error fetching bookings:", bookingsError);
     return (
       <div className="space-y-6">
         <div>
