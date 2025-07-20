@@ -77,7 +77,7 @@ const HeroSection = () => {
               <CardContent className="p-4 lg:p-6">
                 <div className="text-center mb-4 lg:mb-6">
                   <h3 className="text-lg lg:text-xl font-bold text-hotel-green">Quick Booking</h3>
-                  <p className="text-xs lg:text-sm text-muted-foreground font-medium">Check availability and rates</p>
+                  <p className="text-xs lg:text-sm text-white font-medium">Check availability and rates</p>
                 </div>
                 
                 <div className="space-y-4">
