@@ -8,22 +8,22 @@ const HeroSection = () => {
     <section className="relative bg-gradient-hero min-h-[80vh] flex items-center justify-center text-primary-foreground overflow-hidden">
       {/* Hotel Background Image */}
       <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-12"
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-25"
         style={{
           backgroundImage: `url('/lovable-uploads/60388d91-6ee6-4582-a857-1cf80ec0dbb0.png')`
         }}
       ></div>
       
+      {/* Green overlay for executive feel */}
+      <div className="absolute inset-0 bg-gradient-to-br from-hotel-green/85 via-hotel-green/75 to-hotel-green-accent/80"></div>
+      
       {/* Background Pattern Overlay */}
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iNCIvPjwvZz48L2c+PC9zdmc+')] opacity-8"></div>
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iNCIvPjwvZz48L2c+PC9zdmc+')] opacity-10"></div>
       
-      {/* Subtle gradient overlay for better text contrast */}
-      <div className="absolute inset-0 bg-gradient-to-b from-hotel-green/20 via-transparent to-hotel-green/30"></div>
-      
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+      <div className="container mx-auto px-4 relative z-20">
+        <div className="grid lg:grid-cols-12 gap-8 items-center min-h-[70vh]">
           {/* Hero Content */}
-          <div className="text-center lg:text-left space-y-6 animate-fade-in relative z-10">
+          <div className="lg:col-span-7 text-center lg:text-left space-y-6 animate-fade-in relative z-10">
             <div className="space-y-2">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-white drop-shadow-lg">
                 Welcome to{' '}
@@ -72,8 +72,8 @@ const HeroSection = () => {
           </div>
 
           {/* Quick Booking Widget */}
-          <div className="flex justify-center lg:justify-end animate-fade-in">
-            <Card className="w-full max-w-md bg-white/98 backdrop-blur border-none shadow-elegant">
+          <div className="lg:col-span-5 flex justify-center lg:justify-end animate-fade-in relative z-10">
+            <Card className="w-full max-w-sm bg-white/98 backdrop-blur border-none shadow-2xl rounded-2xl overflow-hidden">
               <CardContent className="p-6">
                 <div className="text-center mb-6">
                   <h3 className="text-xl font-bold text-hotel-green">Quick Booking</h3>
@@ -139,10 +139,10 @@ const HeroSection = () => {
         </div>
 
         {/* Location Badge */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-float">
-          <div className="bg-background/10 backdrop-blur border border-primary-foreground/20 rounded-full px-6 py-3 flex items-center space-x-2">
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-float z-10">
+          <div className="bg-white/15 backdrop-blur border border-white/30 rounded-full px-6 py-3 flex items-center space-x-2">
             <MapPin className="h-5 w-5 text-hotel-gold" />
-            <span className="text-sm font-medium">Nyamasaria, Kisumu, Kenya</span>
+            <span className="text-sm font-medium text-white">Nyamasaria, Kisumu, Kenya</span>
           </div>
         </div>
       </div>
