@@ -14,6 +14,77 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_audit_log: {
+        Row: {
+          action: string
+          admin_user_id: string
+          created_at: string | null
+          id: string
+          new_values: Json | null
+          old_values: Json | null
+          record_id: string | null
+          table_name: string
+        }
+        Insert: {
+          action: string
+          admin_user_id: string
+          created_at?: string | null
+          id?: string
+          new_values?: Json | null
+          old_values?: Json | null
+          record_id?: string | null
+          table_name: string
+        }
+        Update: {
+          action?: string
+          admin_user_id?: string
+          created_at?: string | null
+          id?: string
+          new_values?: Json | null
+          old_values?: Json | null
+          record_id?: string | null
+          table_name?: string
+        }
+        Relationships: []
+      }
+      booking_status_history: {
+        Row: {
+          booking_id: string
+          changed_by: string | null
+          created_at: string | null
+          id: string
+          new_status: string
+          notes: string | null
+          old_status: string | null
+        }
+        Insert: {
+          booking_id: string
+          changed_by?: string | null
+          created_at?: string | null
+          id?: string
+          new_status: string
+          notes?: string | null
+          old_status?: string | null
+        }
+        Update: {
+          booking_id?: string
+          changed_by?: string | null
+          created_at?: string | null
+          id?: string
+          new_status?: string
+          notes?: string | null
+          old_status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "booking_status_history_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       bookings: {
         Row: {
           adults: number
@@ -172,6 +243,36 @@ export type Database = {
         }
         Relationships: []
       }
+      notification_preferences: {
+        Row: {
+          booking_confirmations: boolean | null
+          created_at: string | null
+          email_notifications: boolean | null
+          id: string
+          promotional_emails: boolean | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          booking_confirmations?: boolean | null
+          created_at?: string | null
+          email_notifications?: boolean | null
+          id?: string
+          promotional_emails?: boolean | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          booking_confirmations?: boolean | null
+          created_at?: string | null
+          email_notifications?: boolean | null
+          id?: string
+          promotional_emails?: boolean | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -201,6 +302,44 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      room_availability: {
+        Row: {
+          available_rooms: number
+          base_price: number | null
+          created_at: string | null
+          date: string
+          id: string
+          room_type_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          available_rooms?: number
+          base_price?: number | null
+          created_at?: string | null
+          date: string
+          id?: string
+          room_type_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          available_rooms?: number
+          base_price?: number | null
+          created_at?: string | null
+          date?: string
+          id?: string
+          room_type_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "room_availability_room_type_id_fkey"
+            columns: ["room_type_id"]
+            isOneToOne: false
+            referencedRelation: "room_types"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       room_types: {
         Row: {
