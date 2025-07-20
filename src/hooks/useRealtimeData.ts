@@ -1,3 +1,4 @@
+
 import { useEffect, useState, useCallback } from 'react'
 import { supabase } from '@/integrations/supabase/client'
 import { RealtimeChannel } from '@supabase/supabase-js'
@@ -22,11 +23,9 @@ export const useRealtimeData = <T = any>(options: RealtimeOptions) => {
     try {
       setLoading(true)
       
-      // Use any for Supabase query to avoid type issues
       let query = (supabase as any).from(table).select('*')
       
       if (filter) {
-        // Simple filter parsing - in production you'd want more sophisticated filtering
         const [column, operator, value] = filter.split(':')
         if (operator === 'eq') {
           query = query.eq(column, value)
@@ -44,6 +43,7 @@ export const useRealtimeData = <T = any>(options: RealtimeOptions) => {
       setData(fetchedData || [])
       setError(null)
     } catch (err) {
+      console.error(`Error fetching ${table}:`, err)
       setError(err instanceof Error ? err.message : 'An error occurred')
     } finally {
       setLoading(false)
@@ -55,7 +55,7 @@ export const useRealtimeData = <T = any>(options: RealtimeOptions) => {
 
     // Set up real-time subscription
     const realtimeChannel = supabase
-      .channel(`realtime-${table}`)
+      .channel(`realtime-${table}-${Date.now()}`)
       .on(
         'postgres_changes' as any,
         {
@@ -64,6 +64,7 @@ export const useRealtimeData = <T = any>(options: RealtimeOptions) => {
           table: table
         },
         (payload) => {
+          console.log('Real-time INSERT:', payload)
           setData(current => [payload.new as T, ...current])
           onInsert?.(payload)
         }
@@ -76,6 +77,7 @@ export const useRealtimeData = <T = any>(options: RealtimeOptions) => {
           table: table
         },
         (payload) => {
+          console.log('Real-time UPDATE:', payload)
           setData(current => 
             current.map(item => 
               (item as any).id === payload.new.id ? payload.new as T : item
@@ -92,18 +94,22 @@ export const useRealtimeData = <T = any>(options: RealtimeOptions) => {
           table: table
         },
         (payload) => {
+          console.log('Real-time DELETE:', payload)
           setData(current => 
             current.filter(item => (item as any).id !== payload.old.id)
           )
           onDelete?.(payload)
         }
       )
-      .subscribe()
+      .subscribe((status) => {
+        console.log(`Real-time subscription status for ${table}:`, status)
+      })
 
     setChannel(realtimeChannel)
 
     return () => {
       if (realtimeChannel) {
+        console.log(`Unsubscribing from ${table} real-time channel`)
         supabase.removeChannel(realtimeChannel)
       }
     }
@@ -122,39 +128,37 @@ export const useRealtimeData = <T = any>(options: RealtimeOptions) => {
   }
 }
 
-// Specialized hook for external portal communication
+// Enhanced hook for external portal sync (now works directly with Supabase)
 export const useExternalPortalSync = () => {
-  const [syncStatus, setSyncStatus] = useState<'connected' | 'disconnected' | 'syncing'>('disconnected')
-  const [lastSync, setLastSync] = useState<Date | null>(null)
+  const [syncStatus, setSyncStatus] = useState<'connected' | 'disconnected' | 'syncing'>('connected')
+  const [lastSync, setLastSync] = useState<Date | null>(new Date())
 
-  const sendToExternalPortal = useCallback(async (
-    endpoint: string, 
-    data: any, 
-    method: 'POST' | 'PUT' | 'DELETE' = 'POST'
+  const logActivity = useCallback(async (
+    table: string,
+    operation: string,
+    data: any
   ) => {
     try {
       setSyncStatus('syncing')
       
-      // This would be configured with actual external portal endpoints
-      const response = await fetch(`/api/external-portal/${endpoint}`, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Portal-Token': 'your-portal-token-here'
-        },
-        body: JSON.stringify(data)
-      })
-
-      if (!response.ok) {
-        throw new Error(`External portal sync failed: ${response.statusText}`)
-      }
+      // Log to audit table
+      await supabase
+        .from('audit_logs')
+        .insert({
+          table_name: table,
+          operation: operation,
+          new_data: data,
+          source: 'admin_panel',
+          external_portal_user: 'Admin User'
+        })
 
       setSyncStatus('connected')
       setLastSync(new Date())
       
-      return await response.json()
+      return { success: true }
     } catch (error) {
       setSyncStatus('disconnected')
+      console.error('Failed to log activity:', error)
       throw error
     }
   }, [])
@@ -162,6 +166,6 @@ export const useExternalPortalSync = () => {
   return {
     syncStatus,
     lastSync,
-    sendToExternalPortal
+    logActivity
   }
 }
