@@ -83,7 +83,7 @@ const HeroSection = () => {
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                      <div>
-                      <label className="text-sm font-bold text-hotel-green mb-1 block">Check-in</label>
+                      <label className="text-sm font-bold text-white mb-1 block">Check-in</label>
                       <div className="relative">
                         <input 
                           type="date" 
@@ -94,7 +94,7 @@ const HeroSection = () => {
                       </div>
                     </div>
                     <div>
-                      <label className="text-sm font-bold text-hotel-green mb-1 block">Check-out</label>
+                      <label className="text-sm font-bold text-white mb-1 block">Check-out</label>
                       <div className="relative">
                         <input 
                           type="date" 
