@@ -281,6 +281,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: string
       }
+      is_current_user_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
       update_booking_status: {
         Args: { booking_id: string; new_status: string; admin_user_id?: string }
         Returns: undefined
