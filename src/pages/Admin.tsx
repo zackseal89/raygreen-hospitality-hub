@@ -1,22 +1,20 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { RealtimeDashboard } from '@/components/admin/RealtimeDashboard'
-import { ExternalPortalDemo } from '@/components/admin/ExternalPortalDemo'
-import BookingManagement from '@/components/admin/BookingManagement'
+import { useAdminAuth } from '@/hooks/useAdminAuth'
+import AdminDashboard from '@/components/admin/AdminDashboard'
 import Layout from '@/components/layout/Layout'
-import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/components/ui/button'
 
 const Admin = () => {
   const navigate = useNavigate()
-  const { user, userRole, loading, signOut } = useAuth()
+  const { user, isAdmin, loading, signOut } = useAdminAuth()
 
   useEffect(() => {
     // Redirect to auth page if not authenticated or not admin
-    if (!loading && (!user || userRole !== 'admin')) {
+    if (!loading && (!user || !isAdmin)) {
       navigate('/admin-auth', { replace: true })
     }
-  }, [user, userRole, loading, navigate])
+  }, [user, isAdmin, loading, navigate])
 
   const handleSignOut = async () => {
     await signOut()
@@ -33,7 +31,7 @@ const Admin = () => {
   }
 
   // Don't render admin content if user is not authenticated or not admin
-  if (!user || userRole !== 'admin') {
+  if (!user || !isAdmin) {
     return null
   }
 
@@ -42,7 +40,6 @@ const Admin = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-3xl font-bold">Admin Dashboard</h1>
             <p className="text-muted-foreground">Welcome, {user.email}</p>
           </div>
           <Button onClick={handleSignOut} variant="outline">
@@ -50,11 +47,7 @@ const Admin = () => {
           </Button>
         </div>
         
-        <div className="space-y-8">
-          <BookingManagement />
-          <RealtimeDashboard />
-          <ExternalPortalDemo />
-        </div>
+        <AdminDashboard />
       </div>
     </Layout>
   )

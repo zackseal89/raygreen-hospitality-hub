@@ -1,17 +1,16 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '@/hooks/useAuth'
+import { useAdminAuth } from '@/hooks/useAdminAuth'
 import Layout from '@/components/layout/Layout'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useToast } from '@/hooks/use-toast'
-import { supabase } from '@/integrations/supabase/client'
 
 const AdminAuth = () => {
   const navigate = useNavigate()
-  const { user, userRole, loading } = useAuth()
+  const { user, isAdmin, loading, signIn } = useAdminAuth()
   const { toast } = useToast()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -19,20 +18,17 @@ const AdminAuth = () => {
 
   useEffect(() => {
     // If user is already authenticated and is an admin, redirect to admin dashboard
-    if (!loading && user && userRole === 'admin') {
+    if (!loading && user && isAdmin) {
       navigate('/admin', { replace: true })
     }
-  }, [user, userRole, loading, navigate])
+  }, [user, isAdmin, loading, navigate])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      })
+      const { error } = await signIn(email, password)
 
       if (error) {
         toast({
@@ -66,7 +62,7 @@ const AdminAuth = () => {
   }
 
   // If user is logged in but not admin, show access denied
-  if (user && userRole && userRole !== 'admin') {
+  if (user && !isAdmin) {
     return (
       <Layout>
         <div className="flex items-center justify-center min-h-screen">
