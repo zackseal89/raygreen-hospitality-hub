@@ -17,7 +17,7 @@ All colors MUST be HSL.
     --popover-foreground: 120 12% 12%;
     
     /* Primary - Modern Forest Green with depth */
-    --primary: 120 40% 22%;
+    --primary: 140 25% 45%;
     --primary-foreground: 120 15% 98%;
     
     /* Secondary - Contemporary Neutrals */
@@ -52,10 +52,10 @@ All colors MUST be HSL.
     --sidebar-ring: 120 40% 22%;
     
     /* Gen Z + Executive Brand Colors */
-    --hotel-green: 120 40% 22%;
-    --hotel-green-light: 120 35% 35%;
-    --hotel-green-lighter: 120 25% 88%;
-    --hotel-green-accent: 140 45% 25%;
+    --hotel-green: 140 25% 45%;
+    --hotel-green-light: 140 30% 55%;
+    --hotel-green-lighter: 140 20% 88%;
+    --hotel-green-accent: 140 35% 35%;
     --hotel-earth: 28 35% 55%;
     --hotel-earth-light: 28 25% 82%;
     --hotel-gold: 42 88% 58%;
