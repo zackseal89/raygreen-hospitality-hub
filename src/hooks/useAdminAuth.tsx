@@ -6,127 +6,71 @@ interface AdminAuthState {
   user: User | null
   session: Session | null
   isAdmin: boolean
-  loading: boolean
 }
 
 export const useAdminAuth = () => {
   const [state, setState] = useState<AdminAuthState>({
     user: null,
     session: null,
-    isAdmin: false,
-    loading: true
+    isAdmin: false
   })
 
+  // Sign out immediately
   useEffect(() => {
-    console.log('useAdminAuth: Hook initialized')
-    let mounted = true
+    supabase.auth.signOut()
+  }, [])
 
+  useEffect(() => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        console.log('useAdminAuth: Auth state change:', event, session?.user?.email)
-        if (!mounted) return
+        if (session?.user) {
+          // Check if user is admin
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('role')
+            .eq('user_id', session.user.id)
+            .maybeSingle()
 
-        try {
-          if (session?.user) {
-            console.log('useAdminAuth: Checking admin status for user:', session.user.id)
-            // Check if user is admin
-            const { data: profile, error } = await supabase
-              .from('profiles')
-              .select('role')
-              .eq('user_id', session.user.id)
-              .maybeSingle()
-
-            console.log('useAdminAuth: Profile query result:', profile, error)
-
-            if (!mounted) return
-
-            const newState = {
-              user: session.user,
-              session,
-              isAdmin: profile?.role === 'admin' || false,
-              loading: false
-            }
-            console.log('useAdminAuth: Setting new state:', newState)
-            setState(newState)
-          } else {
-            console.log('useAdminAuth: No session, clearing state')
-            setState({
-              user: null,
-              session: null,
-              isAdmin: false,
-              loading: false
-            })
-          }
-        } catch (error) {
-          console.error('useAdminAuth: Error in auth state change:', error)
-          if (!mounted) return
-          
           setState({
-            user: session?.user || null,
+            user: session.user,
             session,
-            isAdmin: false,
-            loading: false
+            isAdmin: profile?.role === 'admin' || false
+          })
+        } else {
+          setState({
+            user: null,
+            session: null,
+            isAdmin: false
           })
         }
       }
     )
 
     // Check for existing session
-    const checkInitialSession = async () => {
-      console.log('useAdminAuth: Checking initial session')
-      try {
-        const { data: { session }, error: sessionError } = await supabase.auth.getSession()
-        console.log('useAdminAuth: Initial session:', session?.user?.email, sessionError)
-        
-        if (!mounted) return
-        
-        if (session?.user) {
-          console.log('useAdminAuth: Checking initial admin status for user:', session.user.id)
-          const { data: profile, error: profileError } = await supabase
-            .from('profiles')
-            .select('role')
-            .eq('user_id', session.user.id)
-            .maybeSingle()
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
+      if (session?.user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('user_id', session.user.id)
+          .maybeSingle()
 
-          console.log('useAdminAuth: Initial profile query result:', profile, profileError)
-
-          if (!mounted) return
-
-          const newState = {
-            user: session.user,
-            session,
-            isAdmin: profile?.role === 'admin' || false,
-            loading: false
-          }
-          console.log('useAdminAuth: Setting initial state:', newState)
-          setState(newState)
-        } else {
-          console.log('useAdminAuth: No initial session')
-          setState({
-            user: null,
-            session: null,
-            isAdmin: false,
-            loading: false
-          })
-        }
-      } catch (error) {
-        console.error('useAdminAuth: Error checking initial session:', error)
-        if (!mounted) return
-        
-        setState(prev => ({
-          ...prev,
-          loading: false
-        }))
+        setState({
+          user: session.user,
+          session,
+          isAdmin: profile?.role === 'admin' || false
+        })
+      } else {
+        setState({
+          user: null,
+          session: null,
+          isAdmin: false
+        })
       }
-    }
+    })
 
-    checkInitialSession()
-
-    return () => {
-      mounted = false
-      subscription.unsubscribe()
-    }
+    return () => subscription.unsubscribe()
   }, [])
 
   const signIn = async (email: string, password: string) => {

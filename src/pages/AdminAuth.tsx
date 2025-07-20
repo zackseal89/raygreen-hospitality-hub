@@ -10,7 +10,7 @@ import { useToast } from '@/hooks/use-toast'
 
 const AdminAuth = () => {
   const navigate = useNavigate()
-  const { user, isAdmin, loading, signIn } = useAdminAuth()
+  const { user, isAdmin, signIn } = useAdminAuth()
   const { toast } = useToast()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -18,10 +18,10 @@ const AdminAuth = () => {
 
   useEffect(() => {
     // If user is already authenticated and is an admin, redirect to admin dashboard
-    if (!loading && user && isAdmin) {
+    if (user && isAdmin) {
       navigate('/admin', { replace: true })
     }
-  }, [user, isAdmin, loading, navigate])
+  }, [user, isAdmin, navigate])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -50,15 +50,6 @@ const AdminAuth = () => {
     } finally {
       setIsLoading(false)
     }
-  }
-
-  // Show loading state while checking authentication
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
-      </div>
-    )
   }
 
   // If user is logged in but not admin, show access denied

@@ -7,27 +7,18 @@ import { Button } from '@/components/ui/button'
 
 const Admin = () => {
   const navigate = useNavigate()
-  const { user, isAdmin, loading, signOut } = useAdminAuth()
+  const { user, isAdmin, signOut } = useAdminAuth()
 
   useEffect(() => {
     // Redirect to auth page if not authenticated or not admin
-    if (!loading && (!user || !isAdmin)) {
+    if (!user || !isAdmin) {
       navigate('/admin-auth', { replace: true })
     }
-  }, [user, isAdmin, loading, navigate])
+  }, [user, isAdmin, navigate])
 
   const handleSignOut = async () => {
     await signOut()
     navigate('/', { replace: true })
-  }
-
-  // Show loading state while checking authentication
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
-      </div>
-    )
   }
 
   // Don't render admin content if user is not authenticated or not admin
