@@ -15,10 +15,6 @@ export const useAdminAuth = () => {
     isAdmin: false
   })
 
-  // Sign out immediately
-  useEffect(() => {
-    supabase.auth.signOut()
-  }, [])
 
   useEffect(() => {
     // Set up auth state listener
