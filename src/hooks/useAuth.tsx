@@ -33,39 +33,70 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setSession(session)
-        setUser(session?.user ?? null)
+      async (event, session) => {
+        console.log('Auth state change:', event, session?.user?.email);
+        
+        if (event === 'TOKEN_REFRESHED') {
+          console.log('Token refreshed successfully');
+        }
+        
+        if (event === 'SIGNED_OUT' || !session) {
+          setSession(null);
+          setUser(null);
+          setUserRole(null);
+          setLoading(false);
+          return;
+        }
+        
+        setSession(session);
+        setUser(session?.user ?? null);
         
         // Fetch user role when session changes
         if (session?.user) {
           setTimeout(() => {
-            fetchUserRole(session.user.id)
-          }, 0)
+            fetchUserRole(session.user.id);
+          }, 0);
         } else {
-          setUserRole(null)
+          setUserRole(null);
         }
         
-        setLoading(false)
+        setLoading(false);
       }
-    )
+    );
 
     // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-      setUser(session?.user ?? null)
-      
-      if (session?.user) {
-        setTimeout(() => {
-          fetchUserRole(session.user.id)
-        }, 0)
+    const initializeAuth = async () => {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (error) {
+          console.error('Session error:', error);
+          setLoading(false);
+          return;
+        }
+        
+        if (session) {
+          setSession(session);
+          setUser(session.user);
+          
+          if (session.user) {
+            setTimeout(() => {
+              fetchUserRole(session.user.id);
+            }, 0);
+          }
+        }
+        
+        setLoading(false);
+      } catch (error) {
+        console.error('Auth initialization error:', error);
+        setLoading(false);
       }
-      
-      setLoading(false)
-    })
+    };
 
-    return () => subscription.unsubscribe()
-  }, [])
+    initializeAuth();
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const fetchUserRole = async (userId: string) => {
     try {
