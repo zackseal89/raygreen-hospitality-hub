@@ -8,41 +8,44 @@ const HeroSection = () => {
     <section className="relative bg-gradient-hero min-h-[80vh] flex items-center justify-center text-primary-foreground overflow-hidden">
       {/* Hotel Background Image */}
       <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-15"
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-12"
         style={{
           backgroundImage: `url('/lovable-uploads/60388d91-6ee6-4582-a857-1cf80ec0dbb0.png')`
         }}
       ></div>
       
       {/* Background Pattern Overlay */}
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48Y2lyY2xlIGN4PSIzMCIgY3k9IjMwIiByPSI0Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-10"></div>
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iNCIvPjwvZz48L2c+PC9zdmc+')] opacity-8"></div>
+      
+      {/* Subtle gradient overlay for better text contrast */}
+      <div className="absolute inset-0 bg-gradient-to-b from-hotel-green/20 via-transparent to-hotel-green/30"></div>
       
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Hero Content */}
-          <div className="text-center lg:text-left space-y-6 animate-fade-in">
+          <div className="text-center lg:text-left space-y-6 animate-fade-in relative z-10">
             <div className="space-y-2">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-white drop-shadow-lg">
                 Welcome to{' '}
-                <span className="text-hotel-gold">Raygreen Hotel</span>
+                <span className="text-hotel-gold font-extrabold drop-shadow-md">Raygreen Hotel</span>
               </h1>
-              <p className="text-xl md:text-2xl text-hotel-gold font-medium">
+              <p className="text-xl md:text-2xl text-hotel-gold font-semibold drop-shadow-sm">
                 Best African Hospitality
               </p>
             </div>
             
-            <p className="text-lg md:text-xl text-primary-foreground/90 max-w-2xl mx-auto lg:mx-0">
+            <p className="text-lg md:text-xl text-white/95 max-w-2xl mx-auto lg:mx-0 font-medium leading-relaxed drop-shadow-sm">
               Welcome to Raygreen Hotel, where luxury meets comfort. We offer a serene escape from the hustle and bustle of the city. Our elegantly designed rooms provide a peaceful soul soothing environment, complete with modern amenities.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
               <Link to="/booking">
-                <Button size="lg" className="bg-hotel-gold hover:bg-hotel-gold-light text-hotel-green font-semibold text-lg px-8 py-3 shadow-gold">
+                <Button size="lg" className="bg-hotel-gold hover:bg-hotel-gold-light text-hotel-green font-bold text-lg px-8 py-4 shadow-gold border-2 border-hotel-gold hover:border-hotel-gold-light transition-all duration-300">
                   Book Your Stay Now
                 </Button>
               </Link>
               <Link to="/rooms">
-                <Button size="lg" variant="outline" className="border-2 border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary text-lg px-8 py-3">
+                <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-hotel-green font-semibold text-lg px-8 py-4 backdrop-blur-sm bg-white/10 transition-all duration-300">
                   Explore Our Rooms
                 </Button>
               </Link>
@@ -70,17 +73,17 @@ const HeroSection = () => {
 
           {/* Quick Booking Widget */}
           <div className="flex justify-center lg:justify-end animate-fade-in">
-            <Card className="w-full max-w-md bg-background/95 backdrop-blur border-none shadow-elegant">
+            <Card className="w-full max-w-md bg-white/98 backdrop-blur border-none shadow-elegant">
               <CardContent className="p-6">
                 <div className="text-center mb-6">
-                  <h3 className="text-xl font-semibold text-primary">Quick Booking</h3>
-                  <p className="text-sm text-muted-foreground">Check availability and rates</p>
+                  <h3 className="text-xl font-bold text-hotel-green">Quick Booking</h3>
+                  <p className="text-sm text-muted-foreground font-medium">Check availability and rates</p>
                 </div>
                 
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="text-sm font-medium text-primary">Check-in</label>
+                      <label className="text-sm font-semibold text-hotel-green">Check-in</label>
                       <div className="relative">
                         <input 
                           type="date" 
@@ -91,7 +94,7 @@ const HeroSection = () => {
                       </div>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-primary">Check-out</label>
+                      <label className="text-sm font-semibold text-hotel-green">Check-out</label>
                       <div className="relative">
                         <input 
                           type="date" 
@@ -105,8 +108,8 @@ const HeroSection = () => {
                   
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="text-sm font-medium text-primary">Adults</label>
-                      <select className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-hotel-green focus:border-transparent">
+                      <label className="text-sm font-semibold text-hotel-green">Adults</label>
+                      <select className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-hotel-green focus:border-transparent font-medium">
                         <option value="1">1 Adult</option>
                         <option value="2">2 Adults</option>
                         <option value="3">3 Adults</option>
@@ -114,8 +117,8 @@ const HeroSection = () => {
                       </select>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-primary">Children</label>
-                      <select className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-hotel-green focus:border-transparent">
+                      <label className="text-sm font-semibold text-hotel-green">Children</label>
+                      <select className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-hotel-green focus:border-transparent font-medium">
                         <option value="0">0 Children</option>
                         <option value="1">1 Child</option>
                         <option value="2">2 Children</option>

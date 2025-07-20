@@ -73,11 +73,11 @@ All colors MUST be HSL.
     --neutral-800: 120 8% 8%;
     
     /* Dynamic Gradients for modern appeal */
-    --gradient-hero: linear-gradient(135deg, hsl(var(--hotel-green)), hsl(var(--hotel-green-accent)));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--hotel-green)) 0%, hsl(var(--hotel-green-accent)) 100%);
     --gradient-gold: linear-gradient(135deg, hsl(var(--hotel-gold)), hsl(var(--hotel-gold-accent)));
     --gradient-earth: linear-gradient(180deg, hsl(var(--hotel-earth-light)), hsl(var(--hotel-earth)));
     --gradient-modern: linear-gradient(45deg, hsl(var(--hotel-green)), hsl(var(--hotel-gold)) 50%, hsl(var(--hotel-green-accent)));
-    --gradient-glass: linear-gradient(135deg, hsl(var(--background) / 0.8), hsl(var(--card) / 0.6));
+    --gradient-glass: linear-gradient(135deg, hsl(var(--background) / 0.95), hsl(var(--card) / 0.8));
     
     /* Enhanced Shadows for depth */
     --shadow-elegant: 0 20px 50px -12px hsl(var(--hotel-green) / 0.25);
