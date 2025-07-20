@@ -108,7 +108,7 @@ const HeroSection = () => {
                   
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="text-xs lg:text-sm font-semibold text-hotel-green">Adults</label>
+                      <label className="text-xs lg:text-sm font-semibold text-white">Adults</label>
                       <select className="w-full p-2 lg:p-3 border rounded-lg focus:ring-2 focus:ring-hotel-green focus:border-transparent font-medium text-sm">
                         <option value="1">1 Adult</option>
                         <option value="2">2 Adults</option>
@@ -117,7 +117,7 @@ const HeroSection = () => {
                       </select>
                     </div>
                     <div>
-                      <label className="text-xs lg:text-sm font-semibold text-hotel-green">Children</label>
+                      <label className="text-xs lg:text-sm font-semibold text-white">Children</label>
                       <select className="w-full p-2 lg:p-3 border rounded-lg focus:ring-2 focus:ring-hotel-green focus:border-transparent font-medium text-sm">
                         <option value="0">0 Children</option>
                         <option value="1">1 Child</option>
