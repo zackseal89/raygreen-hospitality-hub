@@ -183,13 +183,8 @@ const Booking = () => {
       }
 
       if (response.url) {
-        // Open Stripe checkout in a new tab
-        window.open(response.url, '_blank');
-        
-        toast({
-          title: "Redirecting to Payment",
-          description: "Please complete your payment in the new tab that opened.",
-        });
+        // Redirect to Stripe checkout in the same window
+        window.location.href = response.url;
       }
       
     } catch (error) {
