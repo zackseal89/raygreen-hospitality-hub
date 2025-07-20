@@ -83,6 +83,9 @@ const Booking = () => {
   useEffect(() => {
     const fetchRoomTypes = async () => {
       try {
+        // Clear any existing session to ensure anonymous access
+        await supabase.auth.signOut();
+        
         const { data, error } = await supabase
           .from('room_types')
           .select('*')
