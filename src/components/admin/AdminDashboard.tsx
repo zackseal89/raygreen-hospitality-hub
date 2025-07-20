@@ -11,7 +11,7 @@ const AdminDashboard = () => {
   const { toast } = useToast()
 
   // Fetch bookings
-  const { data: bookings, refetch: refetchBookings } = useQuery({
+  const { data: bookings, refetch: refetchBookings, isLoading: bookingsLoading, error: bookingsError } = useQuery({
     queryKey: ['admin-bookings'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -28,7 +28,7 @@ const AdminDashboard = () => {
   })
 
   // Fetch room types
-  const { data: roomTypes } = useQuery({
+  const { data: roomTypes, isLoading: roomTypesLoading } = useQuery({
     queryKey: ['admin-room-types'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -42,7 +42,7 @@ const AdminDashboard = () => {
   })
 
   // Fetch conference bookings
-  const { data: conferenceBookings } = useQuery({
+  const { data: conferenceBookings, isLoading: conferenceLoading } = useQuery({
     queryKey: ['admin-conference-bookings'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -54,6 +54,22 @@ const AdminDashboard = () => {
       return data
     }
   })
+
+  if (bookingsError) {
+    return (
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+          <p className="text-muted-foreground">Manage bookings and hotel operations</p>
+        </div>
+        <Card>
+          <CardContent className="p-6">
+            <p className="text-destructive">Error loading dashboard data: {bookingsError.message}</p>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
 
   const updateBookingStatus = async (bookingId: string, newStatus: string) => {
     try {
@@ -110,7 +126,12 @@ const AdminDashboard = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {bookings?.map((booking) => (
+                {bookingsLoading ? (
+                  <p>Loading bookings...</p>
+                ) : bookings?.length === 0 ? (
+                  <p className="text-muted-foreground">No bookings found</p>
+                ) : (
+                  bookings?.map((booking) => (
                   <div key={booking.id} className="flex items-center justify-between p-4 border rounded-lg">
                     <div className="space-y-1">
                       <p className="font-medium">{booking.guest_name}</p>
@@ -143,7 +164,8 @@ const AdminDashboard = () => {
                       )}
                     </div>
                   </div>
-                ))}
+                  ))
+                )}
               </div>
             </CardContent>
           </Card>
@@ -157,7 +179,12 @@ const AdminDashboard = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {conferenceBookings?.map((booking) => (
+                {conferenceLoading ? (
+                  <p>Loading conference bookings...</p>
+                ) : conferenceBookings?.length === 0 ? (
+                  <p className="text-muted-foreground">No conference bookings found</p>
+                ) : (
+                  conferenceBookings?.map((booking) => (
                   <div key={booking.id} className="flex items-center justify-between p-4 border rounded-lg">
                     <div className="space-y-1">
                       <p className="font-medium">{booking.contact_name}</p>
@@ -174,7 +201,8 @@ const AdminDashboard = () => {
                       {booking.status}
                     </Badge>
                   </div>
-                ))}
+                  ))
+                )}
               </div>
             </CardContent>
           </Card>
@@ -188,14 +216,20 @@ const AdminDashboard = () => {
             </CardHeader>
             <CardContent>
               <div className="grid gap-4 md:grid-cols-2">
-                {roomTypes?.map((room) => (
+                {roomTypesLoading ? (
+                  <p>Loading room types...</p>
+                ) : roomTypes?.length === 0 ? (
+                  <p className="text-muted-foreground">No room types found</p>
+                ) : (
+                  roomTypes?.map((room) => (
                   <div key={room.id} className="p-4 border rounded-lg">
                     <h3 className="font-medium">{room.name}</h3>
                     <p className="text-sm text-muted-foreground">{room.description}</p>
                     <p className="text-sm font-medium">${room.base_price}/night</p>
                     <p className="text-sm">Max occupancy: {room.max_occupancy}</p>
                   </div>
-                ))}
+                  ))
+                )}
               </div>
             </CardContent>
           </Card>
