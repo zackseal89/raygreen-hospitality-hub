@@ -47,6 +47,48 @@ export type Database = {
         }
         Relationships: []
       }
+      audit_logs: {
+        Row: {
+          changed_at: string | null
+          changed_by: string | null
+          external_portal_user: string | null
+          id: string
+          ip_address: unknown | null
+          new_data: Json | null
+          old_data: Json | null
+          operation: string
+          source: string | null
+          table_name: string
+          user_agent: string | null
+        }
+        Insert: {
+          changed_at?: string | null
+          changed_by?: string | null
+          external_portal_user?: string | null
+          id?: string
+          ip_address?: unknown | null
+          new_data?: Json | null
+          old_data?: Json | null
+          operation: string
+          source?: string | null
+          table_name: string
+          user_agent?: string | null
+        }
+        Update: {
+          changed_at?: string | null
+          changed_by?: string | null
+          external_portal_user?: string | null
+          id?: string
+          ip_address?: unknown | null
+          new_data?: Json | null
+          old_data?: Json | null
+          operation?: string
+          source?: string | null
+          table_name?: string
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       booking_status_history: {
         Row: {
           booking_id: string
@@ -88,6 +130,9 @@ export type Database = {
       bookings: {
         Row: {
           adults: number
+          booking_reference: string | null
+          cancellation_reason: string | null
+          cancelled_at: string | null
           check_in_date: string
           check_out_date: string
           children: number
@@ -96,6 +141,8 @@ export type Database = {
           guest_name: string
           guest_phone: string | null
           id: string
+          payment_method: string | null
+          payment_status: string | null
           room_type_id: string
           special_requests: string | null
           status: string
@@ -106,6 +153,9 @@ export type Database = {
         }
         Insert: {
           adults?: number
+          booking_reference?: string | null
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
           check_in_date: string
           check_out_date: string
           children?: number
@@ -114,6 +164,8 @@ export type Database = {
           guest_name: string
           guest_phone?: string | null
           id?: string
+          payment_method?: string | null
+          payment_status?: string | null
           room_type_id: string
           special_requests?: string | null
           status?: string
@@ -124,6 +176,9 @@ export type Database = {
         }
         Update: {
           adults?: number
+          booking_reference?: string | null
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
           check_in_date?: string
           check_out_date?: string
           children?: number
@@ -132,6 +187,8 @@ export type Database = {
           guest_name?: string
           guest_phone?: string | null
           id?: string
+          payment_method?: string | null
+          payment_status?: string | null
           room_type_id?: string
           special_requests?: string | null
           status?: string
@@ -204,6 +261,42 @@ export type Database = {
           total_price?: number | null
           updated_at?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      external_portal_tokens: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          expires_at: string | null
+          id: string
+          is_active: boolean | null
+          last_used_at: string | null
+          permissions: Json | null
+          portal_name: string
+          token_hash: string
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_used_at?: string | null
+          permissions?: Json | null
+          portal_name: string
+          token_hash: string
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_used_at?: string | null
+          permissions?: Json | null
+          portal_name?: string
+          token_hash?: string
         }
         Relationships: []
       }
@@ -424,8 +517,22 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: boolean
       }
+      log_admin_action: {
+        Args: {
+          p_action: string
+          p_table_name: string
+          p_record_id?: string
+          p_old_values?: Json
+          p_new_values?: Json
+        }
+        Returns: undefined
+      }
       update_booking_status: {
         Args: { booking_id: string; new_status: string; admin_user_id?: string }
+        Returns: undefined
+      }
+      update_user_role: {
+        Args: { target_user_id: string; new_role: string }
         Returns: undefined
       }
     }
