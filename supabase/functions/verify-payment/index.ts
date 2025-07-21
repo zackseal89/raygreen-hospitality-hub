@@ -35,13 +35,61 @@ serve(async (req) => {
     const session = await stripe.checkout.sessions.retrieve(session_id);
 
     if (session.payment_status === "paid") {
+      // Get booking details first
+      const { data: booking, error: fetchError } = await supabaseClient
+        .from("bookings")
+        .select(`
+          *,
+          room_types:room_type_id (
+            name,
+            base_price
+          )
+        `)
+        .eq("stripe_session_id", session_id)
+        .single();
+
+      if (fetchError) throw fetchError;
+      if (!booking) throw new Error("Booking not found");
+
       // Update booking status to confirmed
       const { error } = await supabaseClient
         .from("bookings")
-        .update({ status: "confirmed" })
+        .update({ 
+          status: "confirmed",
+          payment_status: "paid"
+        })
         .eq("stripe_session_id", session_id);
 
       if (error) throw error;
+
+      // Send booking confirmation email
+      try {
+        const { error: emailError } = await supabaseClient.functions.invoke(
+          'send-booking-confirmation',
+          {
+            body: {
+              guestName: booking.guest_name,
+              guestEmail: booking.guest_email,
+              bookingReference: booking.booking_reference,
+              checkInDate: booking.check_in_date,
+              checkOutDate: booking.check_out_date,
+              roomType: booking.room_types?.name || 'Standard Room',
+              adults: booking.adults,
+              children: booking.children,
+              totalPrice: booking.total_price,
+              specialRequests: booking.special_requests
+            }
+          }
+        );
+
+        if (emailError) {
+          console.error("Error sending confirmation email:", emailError);
+          // Don't fail the payment verification if email fails
+        }
+      } catch (emailErr) {
+        console.error("Failed to send confirmation email:", emailErr);
+        // Don't fail the payment verification if email fails
+      }
 
       return new Response(
         JSON.stringify({ 
