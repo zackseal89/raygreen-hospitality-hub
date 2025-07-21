@@ -11,13 +11,13 @@ const corsHeaders = {
 interface BookingConfirmationRequest {
   guestName: string;
   guestEmail: string;
-  roomName: string;
+  roomType: string;
   checkInDate: string;
   checkOutDate: string;
   adults: number;
   children: number;
   totalPrice: number;
-  bookingId: string;
+  bookingReference: string;
   specialRequests?: string;
 }
 
@@ -64,7 +64,7 @@ const handler = async (req: Request): Promise<Response> => {
             <div style="background: white; padding: 25px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #2D5A27;">
               <h2 style="color: #2D5A27; margin-top: 0;">Dear ${bookingData.guestName},</h2>
               <p>Thank you for choosing Raygreen Hotel! We're delighted to confirm your reservation.</p>
-              <p><strong>Booking Reference:</strong> #${bookingData.bookingId.substring(0, 8).toUpperCase()}</p>
+              <p><strong>Booking Reference:</strong> ${bookingData.bookingReference}</p>
             </div>
 
             <div style="background: white; padding: 25px; border-radius: 8px; margin-bottom: 20px;">
@@ -73,7 +73,7 @@ const handler = async (req: Request): Promise<Response> => {
               <div style="display: grid; gap: 15px;">
                 <div style="padding: 15px; background: #f8f9fa; border-radius: 6px;">
                   <strong style="color: #2D5A27;">Room Type:</strong><br>
-                  <span style="font-size: 18px;">${bookingData.roomName}</span>
+                  <span style="font-size: 18px;">${bookingData.roomType}</span>
                 </div>
                 
                 <div style="display: flex; gap: 20px;">
