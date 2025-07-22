@@ -1,3 +1,4 @@
+
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@14.21.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
@@ -19,6 +20,8 @@ serve(async (req) => {
       throw new Error("Session ID is required");
     }
 
+    console.log("Processing payment verification for session:", session_id);
+
     // Initialize Stripe
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
       apiVersion: "2023-10-16",
@@ -33,6 +36,7 @@ serve(async (req) => {
 
     // Retrieve the session from Stripe
     const session = await stripe.checkout.sessions.retrieve(session_id);
+    console.log("Stripe session status:", session.payment_status);
 
     if (session.payment_status === "paid") {
       // Get booking details first
@@ -48,8 +52,16 @@ serve(async (req) => {
         .eq("stripe_session_id", session_id)
         .single();
 
-      if (fetchError) throw fetchError;
-      if (!booking) throw new Error("Booking not found");
+      if (fetchError) {
+        console.error("Error fetching booking:", fetchError);
+        throw fetchError;
+      }
+      if (!booking) {
+        console.error("Booking not found for session:", session_id);
+        throw new Error("Booking not found");
+      }
+
+      console.log("Found booking:", booking.id, "for guest:", booking.guest_email);
 
       // Update booking status to confirmed
       const { error } = await supabaseClient
@@ -60,11 +72,18 @@ serve(async (req) => {
         })
         .eq("stripe_session_id", session_id);
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error updating booking status:", error);
+        throw error;
+      }
+
+      console.log("Booking status updated to confirmed");
 
       // Send booking confirmation email
       try {
-        const { error: emailError } = await supabaseClient.functions.invoke(
+        console.log("Sending confirmation email to:", booking.guest_email);
+        
+        const { data: emailData, error: emailError } = await supabaseClient.functions.invoke(
           'send-booking-confirmation',
           {
             body: {
@@ -85,6 +104,8 @@ serve(async (req) => {
         if (emailError) {
           console.error("Error sending confirmation email:", emailError);
           // Don't fail the payment verification if email fails
+        } else {
+          console.log("Confirmation email sent successfully:", emailData);
         }
       } catch (emailErr) {
         console.error("Failed to send confirmation email:", emailErr);
@@ -102,6 +123,7 @@ serve(async (req) => {
         }
       );
     } else {
+      console.log("Payment not completed, status:", session.payment_status);
       return new Response(
         JSON.stringify({ 
           status: session.payment_status,
