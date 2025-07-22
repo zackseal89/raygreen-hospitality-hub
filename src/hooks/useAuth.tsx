@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState, useCallback } from 'react'
 import { User, Session } from '@supabase/supabase-js'
 import { supabase } from '@/integrations/supabase/client'
 
@@ -6,8 +6,11 @@ interface AuthContextType {
   user: User | null
   session: Session | null
   userRole: string | null
+  isAdmin: boolean
   loading: boolean
-  signOut: () => Promise<void>
+  signIn: (email: string, password: string) => Promise<{ error: any }>
+  signOut: () => Promise<{ error: any }>
+  refreshRole: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -26,9 +29,63 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [userRole, setUserRole] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
 
-  const signOut = async () => {
-    await supabase.auth.signOut()
-  }
+  const fetchUserRole = useCallback(async (userId: string) => {
+    try {
+      const { data: profile, error } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('user_id', userId)
+        .single()
+
+      if (error) {
+        console.error('Error fetching user role:', error)
+        setUserRole('guest')
+        return 'guest'
+      } else {
+        const role = profile?.role || 'guest'
+        setUserRole(role)
+        return role
+      }
+    } catch (error) {
+      console.error('Error fetching user role:', error)
+      setUserRole('guest')
+      return 'guest'
+    }
+  }, [])
+
+  const refreshRole = useCallback(async () => {
+    if (user) {
+      await fetchUserRole(user.id)
+    }
+  }, [user, fetchUserRole])
+
+  const signIn = useCallback(async (email: string, password: string) => {
+    setLoading(true)
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      })
+      return { error }
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  const signOut = useCallback(async () => {
+    setLoading(true)
+    try {
+      const { error } = await supabase.auth.signOut()
+      if (!error) {
+        setUser(null)
+        setSession(null)
+        setUserRole(null)
+      }
+      return { error }
+    } finally {
+      setLoading(false)
+    }
+  }, [])
 
   useEffect(() => {
     // Set up auth state listener FIRST
@@ -96,34 +153,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     initializeAuth();
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [fetchUserRole]);
 
-  const fetchUserRole = async (userId: string) => {
-    try {
-      const { data: profile, error } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('user_id', userId)
-        .single()
-
-      if (error) {
-        console.error('Error fetching user role:', error)
-        setUserRole(null)
-      } else {
-        setUserRole(profile?.role || null)
-      }
-    } catch (error) {
-      console.error('Error fetching user role:', error)
-      setUserRole(null)
-    }
-  }
+  const isAdmin = userRole === 'admin'
 
   const value = {
     user,
     session,
     userRole,
+    isAdmin,
     loading,
-    signOut
+    signIn,
+    signOut,
+    refreshRole
   }
 
   return (
