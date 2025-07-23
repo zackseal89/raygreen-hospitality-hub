@@ -31,10 +31,24 @@ serve(async (req) => {
       { auth: { persistSession: false } }
     );
 
-    // Create the booking record first
+    // Create the booking record first - map frontend fields to database schema
+    const bookingRecord = {
+      room_type_id: bookingData.room_type_id,
+      check_in_date: bookingData.check_in_date,
+      check_out_date: bookingData.check_out_date,
+      guest_name: bookingData.guest_name,
+      guest_email: bookingData.guest_email,
+      guest_phone: bookingData.guest_phone,
+      special_requests: bookingData.special_requests,
+      total_price: bookingData.total_price,
+      status: bookingData.status,
+      user_id: bookingData.user_id,
+      num_guests: (bookingData.adults || 0) + (bookingData.children || 0)
+    };
+
     const { data: booking, error: bookingError } = await supabaseClient
       .from("bookings")
-      .insert([bookingData])
+      .insert([bookingRecord])
       .select()
       .single();
 
