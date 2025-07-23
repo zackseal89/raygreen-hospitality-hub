@@ -144,10 +144,6 @@ export const RoomGallery = () => {
                             <Users className="h-4 w-4" />
                             <span>Sleeps {category.maxOccupancy}</span>
                           </div>
-                          <div className="text-2xl font-bold text-hotel-green">
-                            {formatPrice(category.basePrice)}
-                            <span className="text-sm font-normal text-muted-foreground">/night</span>
-                          </div>
                         </div>
                         <p className="text-muted-foreground leading-relaxed">
                           {category.description}
