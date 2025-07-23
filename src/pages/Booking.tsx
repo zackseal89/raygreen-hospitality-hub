@@ -86,9 +86,19 @@ const Booking = () => {
         // Clear any existing session to ensure anonymous access
         await supabase.auth.signOut();
         
+        // Define the exact room names we want to display
+        const allowedRoomNames = [
+          'Standard Room',
+          'Deluxe Single Room',
+          'Deluxe Double Room',
+          'Executive Single Room',
+          'Executive Double Room'
+        ];
+        
         const { data, error } = await supabase
           .from('room_types')
           .select('*')
+          .in('name', allowedRoomNames)
           .order('base_price', { ascending: true });
 
         if (error) throw error;
