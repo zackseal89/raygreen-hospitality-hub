@@ -42,7 +42,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUserRole('guest')
         return 'guest'
       } else {
-        const role = profile?.role || 'guest'
+        const role = profile ? profile.role || 'guest' : 'guest'
         setUserRole(role)
         return role
       }

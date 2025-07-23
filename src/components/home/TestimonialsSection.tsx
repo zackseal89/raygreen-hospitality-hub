@@ -5,8 +5,8 @@ import { supabase } from '@/integrations/supabase/client';
 
 interface Testimonial {
   id: string;
-  customer_name: string;
-  review: string;
+  name: string;
+  content: string;
   rating: number;
 }
 
@@ -20,7 +20,6 @@ const TestimonialsSection = () => {
         const { data, error } = await supabase
           .from('testimonials')
           .select('*')
-          .eq('is_featured', true)
           .order('created_at', { ascending: false });
 
         if (error) throw error;
@@ -95,17 +94,17 @@ const TestimonialsSection = () => {
 
                 {/* Review Text */}
                 <blockquote className="text-muted-foreground mb-6 leading-relaxed">
-                  "{testimonial.review}"
+                  "{testimonial.content}"
                 </blockquote>
 
                 {/* Customer Info */}
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gradient-hero rounded-full flex items-center justify-center text-primary-foreground font-semibold">
-                    {testimonial.customer_name.split(' ').map(n => n[0]).join('')}
+                    {testimonial.name.split(' ').map(n => n[0]).join('')}
                   </div>
                   <div>
                     <div className="font-semibold text-primary">
-                      {testimonial.customer_name}
+                      {testimonial.name}
                     </div>
                     <div className="text-sm text-muted-foreground">
                       Verified Guest

@@ -40,13 +40,13 @@ interface Booking {
   guest_phone: string
   check_in_date: string
   check_out_date: string
-  adults: number
-  children: number
+  num_guests: number
   total_price: number
   status: string
+  payment_status: string
   special_requests: string
   created_at: string
-  booking_reference: string
+  stripe_session_id: string
   room_types: {
     name: string
   }
@@ -159,19 +159,9 @@ const UnifiedAdminDashboard = () => {
     enabled: isAdmin
   })
 
-  const { data: conferenceBookings = [], isLoading: conferenceLoading } = useQuery({
-    queryKey: ['admin-conference-bookings'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('conference_bookings')
-        .select('*')
-        .order('created_at', { ascending: false })
-
-      if (error) throw error
-      return data as ConferenceBooking[]
-    },
-    enabled: isAdmin
-  })
+  // Remove conference bookings since the table doesn't exist
+  const conferenceBookings: ConferenceBooking[] = []
+  const conferenceLoading = false
 
   const { data: roomTypes = [], isLoading: roomTypesLoading } = useQuery({
     queryKey: ['admin-room-types'],
@@ -187,19 +177,9 @@ const UnifiedAdminDashboard = () => {
     enabled: isAdmin
   })
 
-  const { data: menuItems = [], isLoading: menuLoading } = useQuery({
-    queryKey: ['admin-menu-items'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('menu_items')
-        .select('*')
-        .order('category', { ascending: true })
-
-      if (error) throw error
-      return data
-    },
-    enabled: isAdmin
-  })
+  // Remove menu items since the table doesn't exist yet
+  const menuItems: any[] = []
+  const menuLoading = false
 
   // Calculate stats
   useEffect(() => {
@@ -581,7 +561,7 @@ const UnifiedAdminDashboard = () => {
                               <TableCell>
                                 <div className="flex items-center gap-1 text-sm">
                                   <Users className="h-3 w-3" />
-                                  {booking.adults}A{booking.children > 0 && `, ${booking.children}C`}
+                                  {booking.num_guests} Guest{booking.num_guests !== 1 ? 's' : ''}
                                 </div>
                               </TableCell>
                               <TableCell className="font-medium">

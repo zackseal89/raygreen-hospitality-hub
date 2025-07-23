@@ -14,13 +14,173 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      bookings: {
+        Row: {
+          check_in_date: string
+          check_out_date: string
+          created_at: string
+          guest_email: string
+          guest_name: string
+          guest_phone: string | null
+          id: string
+          num_guests: number
+          payment_status: string
+          room_type_id: string
+          special_requests: string | null
+          status: string
+          stripe_session_id: string | null
+          total_price: number
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          check_in_date: string
+          check_out_date: string
+          created_at?: string
+          guest_email: string
+          guest_name: string
+          guest_phone?: string | null
+          id?: string
+          num_guests?: number
+          payment_status?: string
+          room_type_id: string
+          special_requests?: string | null
+          status?: string
+          stripe_session_id?: string | null
+          total_price: number
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          check_in_date?: string
+          check_out_date?: string
+          created_at?: string
+          guest_email?: string
+          guest_name?: string
+          guest_phone?: string | null
+          id?: string
+          num_guests?: number
+          payment_status?: string
+          room_type_id?: string
+          special_requests?: string | null
+          status?: string
+          stripe_session_id?: string | null
+          total_price?: number
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookings_room_type_id_fkey"
+            columns: ["room_type_id"]
+            isOneToOne: false
+            referencedRelation: "room_types"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          display_name: string | null
+          id: string
+          role: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          role?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          role?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      room_types: {
+        Row: {
+          amenities: string[] | null
+          base_price: number
+          created_at: string
+          description: string | null
+          id: string
+          image_url: string | null
+          max_occupancy: number
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          amenities?: string[] | null
+          base_price: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          max_occupancy?: number
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          amenities?: string[] | null
+          base_price?: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          max_occupancy?: number
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      testimonials: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          image_url: string | null
+          name: string
+          rating: number
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          name: string
+          rating?: number
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          name?: string
+          rating?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_current_user_role: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
     }
     Enums: {
       [_ in never]: never

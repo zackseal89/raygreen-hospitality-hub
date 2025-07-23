@@ -43,17 +43,23 @@ const Dining = () => {
   useEffect(() => {
     const fetchMenuItems = async () => {
       try {
-        const { data, error } = await supabase
-          .from('menu_items')
-          .select('*')
-          .eq('available', true)
-          .order('category', { ascending: true })
-          .order('price', { ascending: true });
-
-        if (error) throw error;
-        setMenuItems(data || []);
+        // For now, we'll use hardcoded menu items since menu_items table doesn't exist yet
+        // You can add the menu_items table later if needed
+        const staticMenuItems: MenuItem[] = [
+          { id: '1', name: 'Grilled Tilapia', description: 'Fresh tilapia served with ugali and sukuma wiki', price: 850, category: 'MAIN COURSE', available: true },
+          { id: '2', name: 'Nyama Choma', description: 'Traditional grilled meat with sides', price: 950, category: 'MAIN COURSE', available: true },
+          { id: '3', name: 'Chicken Curry', description: 'Spiced chicken curry with rice', price: 750, category: 'MAIN COURSE', available: true },
+          { id: '4', name: 'Fish Stew', description: 'Local fish stew with chapati', price: 700, category: 'RAYGREEN SPECIAL', available: true },
+          { id: '5', name: 'Beef Samosas', description: 'Crispy beef samosas', price: 250, category: 'SNACKS', available: true },
+          { id: '6', name: 'Tusker Beer', description: 'Cold Tusker beer', price: 200, category: 'BEVERAGES', available: true },
+          { id: '7', name: 'Fresh Juice', description: 'Orange, mango, or passion fruit', price: 150, category: 'BEVERAGES', available: true },
+          { id: '8', name: 'Ice Cream', description: 'Vanilla or chocolate', price: 300, category: 'DESSERT', available: true },
+          { id: '9', name: 'Kids Chips', description: 'French fries for kids', price: 250, category: 'ALA CARTE KIDS MENU', available: true },
+          { id: '10', name: 'Kids Chicken', description: 'Grilled chicken pieces', price: 400, category: 'ALA CARTE KIDS MENU', available: true },
+        ];
+        setMenuItems(staticMenuItems);
       } catch (error) {
-        console.error('Error fetching menu items:', error);
+        console.error('Error loading menu items:', error);
       } finally {
         setLoading(false);
       }
