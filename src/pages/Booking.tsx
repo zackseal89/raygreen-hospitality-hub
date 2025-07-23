@@ -22,14 +22,6 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
 
-// Import room images
-import roomDeluxe1 from '@/assets/room-deluxe-1.jpg';
-import roomDeluxe2 from '@/assets/room-deluxe-2.jpg';
-import roomStandard1 from '@/assets/room-standard-1.jpg';
-import roomStandard2 from '@/assets/room-standard-2.jpg';
-import roomExecutive from '@/assets/room-executive.jpg';
-import roomFamily from '@/assets/room-family.jpg';
-
 interface RoomType {
   id: string;
   name: string;
@@ -122,23 +114,6 @@ const Booking = () => {
       setTotalPrice(selectedRoom.base_price * nights);
     }
   }, [selectedRoom, watchedDates]);
-
-  // Function to get appropriate room image based on room name
-  const getRoomImage = (roomName: string) => {
-    const name = roomName.toLowerCase();
-    if (name.includes('deluxe')) {
-      return Math.random() > 0.5 ? roomDeluxe1 : roomDeluxe2;
-    } else if (name.includes('standard')) {
-      return Math.random() > 0.5 ? roomStandard1 : roomStandard2;
-    } else if (name.includes('executive') || name.includes('suite')) {
-      return roomExecutive;
-    } else if (name.includes('family')) {
-      return roomFamily;
-    } else {
-      // Default to deluxe for other room types
-      return roomDeluxe1;
-    }
-  };
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-KE', {
@@ -468,11 +443,22 @@ const Booking = () => {
                   {roomTypes.map((room) => (
                     <Card key={room.id} className="group hover:shadow-elegant transition-all duration-300">
                        <div className="h-48 relative overflow-hidden">
-                         <img 
-                           src={getRoomImage(room.name)} 
-                           alt={room.name}
-                           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                         />
+                         {room.image_url ? (
+                           <img 
+                             src={room.image_url} 
+                             alt={room.name}
+                             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                           />
+                         ) : (
+                           <div className="h-full bg-gradient-earth relative">
+                             <div className="absolute inset-0 bg-gradient-to-br from-hotel-green/20 to-hotel-gold/20 flex items-center justify-center">
+                               <div className="text-center text-white">
+                                 <div className="text-3xl font-bold mb-2">{room.name.split(' ')[0]}</div>
+                                 <div className="text-sm opacity-80">Premium Room</div>
+                               </div>
+                             </div>
+                           </div>
+                         )}
                          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                        </div>
 
