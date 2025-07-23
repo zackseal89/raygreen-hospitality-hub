@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, MapPin, Phone, Mail } from 'lucide-react';
+import { Menu, X, MapPin, Phone, Mail, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/hooks/useAuth';
 import {
   Sheet,
   SheetContent,
@@ -11,6 +12,7 @@ import {
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const { isAdmin } = useAuth();
 
   const navigation = [
     { name: 'Home', href: '/' },
@@ -91,6 +93,14 @@ const Header = () => {
 
             {/* CTA Button - Desktop */}
             <div className="hidden md:flex items-center space-x-4">
+              {isAdmin && (
+                <Link to="/admin">
+                  <Button variant="outline" size="sm" className="flex items-center gap-2">
+                    <Shield className="h-4 w-4" />
+                    Admin
+                  </Button>
+                </Link>
+              )}
               <Link to="/booking">
                 <Button className="bg-gradient-gold hover:opacity-90 text-hotel-green font-semibold shadow-gold">
                   Book Now
@@ -120,12 +130,21 @@ const Header = () => {
                   <nav className="flex flex-col space-y-4">
                     <NavLinks mobile />
                   </nav>
-                  
-                  <Link to="/booking" onClick={() => setIsOpen(false)}>
-                    <Button className="w-full bg-gradient-gold hover:opacity-90 text-hotel-green font-semibold">
-                      Book Now
-                    </Button>
-                  </Link>
+                   
+                   {isAdmin && (
+                     <Link to="/admin" onClick={() => setIsOpen(false)}>
+                       <Button variant="outline" className="w-full flex items-center gap-2">
+                         <Shield className="h-4 w-4" />
+                         Admin Panel
+                       </Button>
+                     </Link>
+                   )}
+                   
+                   <Link to="/booking" onClick={() => setIsOpen(false)}>
+                     <Button className="w-full bg-gradient-gold hover:opacity-90 text-hotel-green font-semibold">
+                       Book Now
+                     </Button>
+                   </Link>
                 </div>
               </SheetContent>
             </Sheet>
