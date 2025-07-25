@@ -35,7 +35,7 @@ const roomCategories: RoomCategory[] = [
     description: 'Comfortable rooms with modern amenities and beautiful views of the surrounding area.',
     basePrice: 6500,
     maxOccupancy: 2,
-    images: ['/lovable-uploads/8f796d5a-7cdc-4c0b-ba1d-11d64c1502ae.png'],
+    images: ['/lovable-uploads/c477c96b-a4fa-4fdd-ba10-fdcde6550c9e.png'],
     features: ['Queen Size Bed', 'Sitting Area', 'Garden View', 'Modern Bathroom']
   },
   {
