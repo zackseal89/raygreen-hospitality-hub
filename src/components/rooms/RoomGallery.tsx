@@ -44,7 +44,7 @@ const roomCategories: RoomCategory[] = [
     description: 'Well-appointed rooms offering excellent value with all essential amenities.',
     basePrice: 4500,
     maxOccupancy: 2,
-    images: ['/lovable-uploads/933f3573-c7b6-4257-89b9-16e4d552fd83.png'],
+    images: ['/lovable-uploads/9dd58de6-3f87-4814-8838-4a2fe8237ff5.png'],
     features: ['Double Bed', 'En-suite Bathroom', 'Free WiFi', 'Air Conditioning']
   },
   {
