@@ -10,18 +10,18 @@ import { useToast } from '@/hooks/use-toast'
 
 const AdminAuth = () => {
   const navigate = useNavigate()
-  const { user, isAdmin, loading, signIn } = useAuth()
+  const { user, loading, signIn } = useAuth() // Removed isAdmin
   const { toast } = useToast()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
-    // If user is already authenticated and is an admin, redirect to admin dashboard
-    if (!loading && user && isAdmin) {
+    // Redirect if already logged in (no admin check)
+    if (!loading && user) {
       navigate('/admin', { replace: true })
     }
-  }, [user, isAdmin, loading, navigate])
+  }, [user, loading, navigate])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -38,8 +38,7 @@ const AdminAuth = () => {
         })
         return
       }
-
-      // The useEffect will handle the redirect once auth state updates
+      // Redirect handled by useEffect
     } catch (error) {
       console.error('Login error:', error)
       toast({
@@ -52,28 +51,14 @@ const AdminAuth = () => {
     }
   }
 
-  // If user is logged in but not admin, show access denied
-  if (user && !isAdmin) {
-    return (
-      <Layout>
-        <div className="flex items-center justify-center min-h-screen">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold text-destructive mb-4">Access Denied</h1>
-            <p className="text-muted-foreground">You don't have administrator privileges.</p>
-          </div>
-        </div>
-      </Layout>
-    )
-  }
-
   return (
     <Layout>
       <div className="container mx-auto px-4 py-16">
         <Card className="max-w-md mx-auto">
           <CardHeader>
-            <CardTitle>Admin Login</CardTitle>
+            <CardTitle>Login</CardTitle>
             <CardDescription>
-              Please sign in with your administrator credentials
+              Please sign in with your credentials
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -98,9 +83,9 @@ const AdminAuth = () => {
                   required
                 />
               </div>
-              <Button 
-                type="submit" 
-                className="w-full" 
+              <Button
+                type="submit"
+                className="w-full"
                 disabled={isLoading}
               >
                 {isLoading ? "Signing in..." : "Sign In"}
