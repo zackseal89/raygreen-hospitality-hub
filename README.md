@@ -1,4 +1,4 @@
-# Welcome to your Lovable project
+# raygreen-hospitality-hub
 
 ## Project info
 
