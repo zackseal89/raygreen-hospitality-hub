@@ -5,17 +5,17 @@ import UnifiedAdminDashboard from '@/components/admin/UnifiedAdminDashboard'
 
 const Admin = () => {
   const navigate = useNavigate()
-  const { user, isAdmin, loading } = useAuth()
+  const { user, loading } = useAuth() // Removed isAdmin
 
   useEffect(() => {
-    // Redirect to auth page if not authenticated or not admin
-    if (!loading && (!user || !isAdmin)) {
+    // Redirect to login if not authenticated
+    if (!loading && !user) {
       navigate('/admin-auth', { replace: true })
     }
-  }, [user, isAdmin, loading, navigate])
+  }, [user, loading, navigate])
 
-  // Show loading or don't render admin content if user is not authenticated or not admin
-  if (loading || !user || !isAdmin) {
+  // Show loading or nothing if user is not authenticated yet
+  if (loading || !user) {
     return null
   }
 
