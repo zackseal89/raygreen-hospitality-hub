@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      audit_logs: {
+        Row: {
+          action: string
+          created_at: string
+          id: string
+          ip_address: unknown | null
+          new_values: Json | null
+          old_values: Json | null
+          record_id: string | null
+          table_name: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          id?: string
+          ip_address?: unknown | null
+          new_values?: Json | null
+          old_values?: Json | null
+          record_id?: string | null
+          table_name?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          id?: string
+          ip_address?: unknown | null
+          new_values?: Json | null
+          old_values?: Json | null
+          record_id?: string | null
+          table_name?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       bookings: {
         Row: {
           check_in_date: string
@@ -78,6 +117,81 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      external_portal_tokens: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          expires_at: string
+          id: string
+          is_active: boolean
+          last_used_at: string | null
+          permissions: Json | null
+          portal_name: string
+          token_hash: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          expires_at: string
+          id?: string
+          is_active?: boolean
+          last_used_at?: string | null
+          permissions?: Json | null
+          portal_name: string
+          token_hash: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          expires_at?: string
+          id?: string
+          is_active?: boolean
+          last_used_at?: string | null
+          permissions?: Json | null
+          portal_name?: string
+          token_hash?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      menu_items: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          image_url: string | null
+          is_available: boolean
+          name: string
+          price: number
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_available?: boolean
+          name: string
+          price: number
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_available?: boolean
+          name?: string
+          price?: number
+          updated_at?: string
+        }
+        Relationships: []
       }
       profiles: {
         Row: {
@@ -172,6 +286,39 @@ export type Database = {
         }
         Relationships: []
       }
+      webhook_notifications: {
+        Row: {
+          attempts: number
+          created_at: string
+          id: string
+          last_attempt_at: string | null
+          payload: Json
+          portal_name: string
+          status: string
+          webhook_type: string
+        }
+        Insert: {
+          attempts?: number
+          created_at?: string
+          id?: string
+          last_attempt_at?: string | null
+          payload: Json
+          portal_name: string
+          status?: string
+          webhook_type: string
+        }
+        Update: {
+          attempts?: number
+          created_at?: string
+          id?: string
+          last_attempt_at?: string | null
+          payload?: Json
+          portal_name?: string
+          status?: string
+          webhook_type?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -180,6 +327,16 @@ export type Database = {
       get_current_user_role: {
         Args: Record<PropertyKey, never>
         Returns: string
+      }
+      log_admin_action: {
+        Args: {
+          action_type: string
+          table_name?: string
+          record_id?: string
+          old_values?: Json
+          new_values?: Json
+        }
+        Returns: undefined
       }
     }
     Enums: {
