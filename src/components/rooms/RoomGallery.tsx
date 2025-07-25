@@ -25,7 +25,7 @@ const roomCategories: RoomCategory[] = [
     description: 'Spacious and elegantly designed rooms perfect for business travelers and couples seeking luxury.',
     basePrice: 8500,
     maxOccupancy: 2,
-    images: ['/lovable-uploads/6867328d-5cf8-4d3a-bf21-dde09a477492.png', '/lovable-uploads/d24bc69f-aed9-48f9-b727-689a352ab799.png'],
+    images: ['/lovable-uploads/44f2fda4-cfb6-4858-b507-6546c4992bbb.png', '/lovable-uploads/d24bc69f-aed9-48f9-b727-689a352ab799.png'],
     features: ['King Size Bed', 'Work Desk', 'City View', 'Premium Amenities'],
     badge: 'Most Popular'
   },
