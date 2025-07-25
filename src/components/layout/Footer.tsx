@@ -62,7 +62,7 @@ const Footer = () => {
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="h-5 w-5 text-hotel-gold" />
-                <span className="text-sm text-white/90 font-medium">+254 XXX XXX XXX</span>
+                <span className="text-sm text-white/90 font-medium">+254 748 592 727</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="h-5 w-5 text-hotel-gold" />
@@ -101,7 +101,7 @@ const Footer = () => {
                   <Facebook className="h-4 w-4" />
                 </a>
                 <a 
-                  href="#" 
+                  href="https://www.instagram.com/raygreenhotel_kisumu/" 
                   className="bg-hotel-gold text-hotel-green p-2 rounded-lg hover:opacity-80 transition-opacity"
                   aria-label="Instagram"
                 >

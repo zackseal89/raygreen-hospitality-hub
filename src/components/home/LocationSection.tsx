@@ -41,7 +41,7 @@ const LocationSection = () => {
                   <div>
                     <h4 className="font-semibold text-primary">Phone</h4>
                     <p className="text-muted-foreground">
-                      +254 xxx xxx xxx<br />
+                      +254 748 592 727<br />
                       <span className="text-sm">24/7 Reception</span>
                     </p>
                   </div>
