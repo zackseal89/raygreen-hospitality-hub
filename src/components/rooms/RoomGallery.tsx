@@ -73,7 +73,7 @@ export const RoomGallery = () => {
         </div>
 
         <Tabs value={activeCategory} onValueChange={setActiveCategory} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 lg:grid-cols-4 mb-8">
+          <TabsList className="grid w-full grid-cols-3 mb-8">
             {roomCategories.map((category) => (
               <TabsTrigger 
                 key={category.id} 
