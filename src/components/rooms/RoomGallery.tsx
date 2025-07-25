@@ -46,15 +46,6 @@ const roomCategories: RoomCategory[] = [
     maxOccupancy: 2,
     images: ['/lovable-uploads/9dd58de6-3f87-4814-8838-4a2fe8237ff5.png'],
     features: ['Double Bed', 'En-suite Bathroom', 'Free WiFi', 'Air Conditioning']
-  },
-  {
-    id: 'family',
-    name: 'Family Rooms',
-    description: 'Spacious accommodations perfect for families with children.',
-    basePrice: 9500,
-    maxOccupancy: 4,
-    images: ['/lovable-uploads/a6f12749-6cad-4807-bbe1-355c9210011b.png'],
-    features: ['Multiple Beds', 'Extra Space', 'Child-Friendly', 'Family Amenities']
   }
 ];
 
