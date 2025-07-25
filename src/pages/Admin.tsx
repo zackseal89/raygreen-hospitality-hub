@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
-import AdminDashboard from '@/components/admin/AdminDashboard'
+import UnifiedAdminDashboard from '@/components/admin/UnifiedAdminDashboard'
 
 const Admin = () => {
   const navigate = useNavigate()
@@ -19,7 +19,7 @@ const Admin = () => {
     return null
   }
 
-  return <AdminDashboard />
+  return <UnifiedAdminDashboard />
 }
 
 export default Admin
