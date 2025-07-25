@@ -199,7 +199,6 @@ export type Database = {
           created_at: string
           display_name: string | null
           id: string
-          role: string
           updated_at: string
           user_id: string
         }
@@ -208,7 +207,6 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           id?: string
-          role?: string
           updated_at?: string
           user_id: string
         }
@@ -217,7 +215,6 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           id?: string
-          role?: string
           updated_at?: string
           user_id?: string
         }
@@ -286,6 +283,33 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          assigned_at: string
+          assigned_by: string | null
+          id: string
+          is_active: boolean
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          assigned_at?: string
+          assigned_by?: string | null
+          id?: string
+          is_active?: boolean
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          assigned_at?: string
+          assigned_by?: string | null
+          id?: string
+          is_active?: boolean
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
       webhook_notifications: {
         Row: {
           attempts: number
@@ -324,9 +348,24 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      assign_user_role: {
+        Args: {
+          target_user_id: string
+          new_role: Database["public"]["Enums"]["app_role"]
+        }
+        Returns: undefined
+      }
       get_current_user_role: {
         Args: Record<PropertyKey, never>
         Returns: string
+      }
+      get_user_role: {
+        Args: { user_id?: string }
+        Returns: string
+      }
+      is_admin: {
+        Args: { user_id?: string }
+        Returns: boolean
       }
       log_admin_action: {
         Args: {
@@ -338,9 +377,13 @@ export type Database = {
         }
         Returns: undefined
       }
+      log_security_event: {
+        Args: { event_type: string; details?: Json; severity?: string }
+        Returns: undefined
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "guest" | "staff"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -467,6 +510,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "guest", "staff"],
+    },
   },
 } as const
