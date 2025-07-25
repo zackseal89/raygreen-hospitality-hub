@@ -220,6 +220,30 @@ export type Database = {
         }
         Relationships: []
       }
+      rate_limits: {
+        Row: {
+          action: string
+          count: number
+          id: string
+          identifier: string
+          window_start: string
+        }
+        Insert: {
+          action: string
+          count?: number
+          id?: string
+          identifier: string
+          window_start?: string
+        }
+        Update: {
+          action?: string
+          count?: number
+          id?: string
+          identifier?: string
+          window_start?: string
+        }
+        Relationships: []
+      }
       room_types: {
         Row: {
           amenities: string[] | null
@@ -355,6 +379,19 @@ export type Database = {
         }
         Returns: undefined
       }
+      check_rate_limit: {
+        Args: {
+          identifier: string
+          action: string
+          max_requests?: number
+          window_minutes?: number
+        }
+        Returns: boolean
+      }
+      cleanup_rate_limits: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       get_current_user_role: {
         Args: Record<PropertyKey, never>
         Returns: string
@@ -380,6 +417,23 @@ export type Database = {
       log_security_event: {
         Args: { event_type: string; details?: Json; severity?: string }
         Returns: undefined
+      }
+      sanitize_input: {
+        Args: { input_text: string }
+        Returns: string
+      }
+      validate_booking_data: {
+        Args: {
+          guest_name: string
+          guest_email: string
+          guest_phone: string
+          special_requests: string
+        }
+        Returns: Json
+      }
+      validate_portal_token_enhanced: {
+        Args: { token_hash: string; action?: string }
+        Returns: Json
       }
     }
     Enums: {
