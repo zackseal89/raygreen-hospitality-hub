@@ -31,18 +31,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const fetchUserRole = useCallback(async (userId: string) => {
     try {
-      const { data: profile, error } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('user_id', userId)
-        .single()
+      const { data, error } = await supabase.rpc('get_user_role', { user_id: userId })
 
       if (error) {
         console.error('Error fetching user role:', error)
         setUserRole('guest')
         return 'guest'
       } else {
-        const role = profile ? profile.role || 'guest' : 'guest'
+        const role = data || 'guest'
         setUserRole(role)
         return role
       }

@@ -162,22 +162,21 @@ const Booking = () => {
       setLoading(true);
       const nights = differenceInDays(data.checkOut, data.checkIn);
       const bookingData = {
-        room_type_id: selectedRoom.id,
-        check_in_date: format(data.checkIn, 'yyyy-MM-dd'),
-        check_out_date: format(data.checkOut, 'yyyy-MM-dd'),
+        roomTypeId: selectedRoom.id,
+        checkInDate: format(data.checkIn, 'yyyy-MM-dd'),
+        checkOutDate: format(data.checkOut, 'yyyy-MM-dd'),
         adults: data.adults,
         children: data.children,
-        guest_name: data.guestName,
-        guest_email: data.guestEmail,
-        guest_phone: data.guestPhone || null,
-        special_requests: data.specialRequests || null,
-        total_price: totalPrice,
-        status: 'pending',
-        user_id: null, // Guest booking without authentication
+        guestName: data.guestName,
+        guestEmail: data.guestEmail,
+        guestPhone: data.guestPhone || "",
+        specialRequests: data.specialRequests || "",
+        totalPrice: totalPrice,
+        numGuests: data.adults + data.children
       };
 
-      const { data: response, error } = await supabase.functions.invoke('create-checkout', {
-        body: { bookingData }
+      const { data: response, error } = await supabase.functions.invoke('create-direct-booking', {
+        body: bookingData
       });
 
       if (error) {
@@ -192,9 +191,16 @@ const Booking = () => {
         throw error;
       }
 
-      if (response.url) {
-        // Redirect to Stripe checkout in the same window
-        window.location.href = response.url;
+      if (response.success) {
+        toast({
+          title: "Booking Confirmed!",
+          description: `Your booking ${response.bookingReference} has been confirmed. Check your email for details.`,
+        });
+        
+        // Redirect to success page with booking reference
+        navigate(`/booking-success?booking_ref=${response.bookingReference}&booking_id=${response.bookingId}`);
+      } else {
+        throw new Error("Booking confirmation failed");
       }
       
     } catch (error) {
