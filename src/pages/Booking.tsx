@@ -744,8 +744,8 @@ const Booking = () => {
                         type="submit"
                         className="bg-gradient-hero hover:opacity-90 text-primary-foreground font-semibold px-8"
                       >
-                        <CreditCard className="h-4 w-4 mr-2" />
-                        Pay Now
+                        <CheckCircle className="h-4 w-4 mr-2" />
+                        Confirm Booking
                       </Button>
                     </div>
                   </CardContent>
