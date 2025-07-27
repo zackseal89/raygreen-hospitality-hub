@@ -17,16 +17,13 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export const useAuth = () => {
   const context = useContext(AuthContext)
-  console.log('useAuth called, context:', context)
   if (context === undefined) {
-    console.error('AuthContext is undefined - AuthProvider not found in component tree')
     throw new Error('useAuth must be used within an AuthProvider')
   }
   return context
 }
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  console.log('AuthProvider rendered')
   const [user, setUser] = useState<User | null>(null)
   const [session, setSession] = useState<Session | null>(null)
   const [userRole, setUserRole] = useState<string | null>(null)
@@ -34,7 +31,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const fetchUserRole = useCallback(async (userId: string) => {
     try {
-      const { data, error } = await supabase.rpc('get_user_role', { user_id: userId })
+      const { data, error } = await supabase.rpc('get_user_role', { target_user_id: userId })
 
       if (error) {
         console.error('Error fetching user role:', error)
