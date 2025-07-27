@@ -8,14 +8,14 @@ const Admin = () => {
   const { user, isAdmin, loading } = useAuth()
 
   useEffect(() => {
-    // Redirect to auth page if not authenticated or not admin
-    if (!loading && (!user || !isAdmin)) {
+    // Redirect to auth page if not authenticated
+    if (!loading && !user) {
       navigate('/admin-auth', { replace: true })
     }
-  }, [user, isAdmin, loading, navigate])
+  }, [user, loading, navigate])
 
-  // Show loading or don't render admin content if user is not authenticated or not admin
-  if (loading || !user || !isAdmin) {
+  // Show loading or don't render admin content if user is not authenticated
+  if (loading || !user) {
     return null
   }
 

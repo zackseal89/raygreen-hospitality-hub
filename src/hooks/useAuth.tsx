@@ -151,7 +151,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return () => subscription.unsubscribe();
   }, [fetchUserRole]);
 
-  const isAdmin = userRole === 'admin'
+  const isAdmin = user !== null // Allow all authenticated users to be admin
 
   const value = {
     user,

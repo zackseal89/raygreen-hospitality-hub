@@ -17,11 +17,11 @@ const AdminAuth = () => {
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
-    // If user is already authenticated and is an admin, redirect to admin dashboard
-    if (!loading && user && isAdmin) {
+    // If user is already authenticated, redirect to admin dashboard
+    if (!loading && user) {
       navigate('/admin', { replace: true })
     }
-  }, [user, isAdmin, loading, navigate])
+  }, [user, loading, navigate])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -52,28 +52,15 @@ const AdminAuth = () => {
     }
   }
 
-  // If user is logged in but not admin, show access denied
-  if (user && !isAdmin) {
-    return (
-      <Layout>
-        <div className="flex items-center justify-center min-h-screen">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold text-destructive mb-4">Access Denied</h1>
-            <p className="text-muted-foreground">You don't have administrator privileges.</p>
-          </div>
-        </div>
-      </Layout>
-    )
-  }
 
   return (
     <Layout>
       <div className="container mx-auto px-4 py-16">
         <Card className="max-w-md mx-auto">
           <CardHeader>
-            <CardTitle>Admin Login</CardTitle>
+            <CardTitle>Login</CardTitle>
             <CardDescription>
-              Please sign in with your administrator credentials
+              Please sign in to access the admin panel
             </CardDescription>
           </CardHeader>
           <CardContent>
