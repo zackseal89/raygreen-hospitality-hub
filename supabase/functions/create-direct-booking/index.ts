@@ -16,10 +16,21 @@ serve(async (req) => {
     console.log("Creating direct booking:", bookingData);
     console.log("Using updated validation function");
 
+    // Validate that we have the required environment variables
+    const supabaseUrl = Deno.env.get("SUPABASE_URL");
+    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    
+    console.log("Environment check - URL exists:", !!supabaseUrl);
+    console.log("Environment check - Service key exists:", !!supabaseServiceKey);
+    
+    if (!supabaseUrl || !supabaseServiceKey) {
+      throw new Error("Missing required environment variables");
+    }
+
     // Create Supabase client
     const supabaseClient = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+      supabaseUrl,
+      supabaseServiceKey,
       { auth: { persistSession: false } }
     );
 

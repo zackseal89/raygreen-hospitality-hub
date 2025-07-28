@@ -172,11 +172,19 @@ const Booking = () => {
         numGuests: data.adults + data.children
       };
 
+      console.log('Submitting booking data:', bookingData);
+      console.log('Selected room:', selectedRoom);
+      console.log('Total price calculated:', totalPrice);
+
       const { data: response, error } = await supabase.functions.invoke('create-direct-booking', {
         body: bookingData
       });
 
+      console.log('Edge function response:', response);
+      console.log('Edge function error:', error);
+
       if (error) {
+        console.error('Detailed error object:', JSON.stringify(error, null, 2));
         if (error.message?.includes('already have a booking')) {
           toast({
             title: "Duplicate Booking",
@@ -188,7 +196,7 @@ const Booking = () => {
         throw error;
       }
 
-      if (response.success) {
+      if (response?.success) {
         toast({
           title: "Booking Confirmed!",
           description: `Your booking ${response.bookingReference} has been confirmed. Check your email for details.`,
@@ -197,11 +205,15 @@ const Booking = () => {
         // Redirect to success page with booking reference
         navigate(`/booking-success?booking_ref=${response.bookingReference}&booking_id=${response.bookingId}`);
       } else {
+        console.error('Response indicates failure:', response);
         throw new Error("Booking confirmation failed");
       }
       
     } catch (error) {
       console.error('Error creating booking:', error);
+      console.error('Error type:', typeof error);
+      console.error('Error name:', error?.name);
+      console.error('Error message:', error?.message);
       toast({
         title: "Booking Failed",
         description: "There was an error processing your booking. Please try again.",
