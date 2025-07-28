@@ -14,6 +14,7 @@ serve(async (req) => {
   try {
     const bookingData = await req.json();
     console.log("Creating direct booking:", bookingData);
+    console.log("Using updated validation function");
 
     // Create Supabase client
     const supabaseClient = createClient(
