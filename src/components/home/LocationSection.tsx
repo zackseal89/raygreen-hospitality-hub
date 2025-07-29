@@ -54,8 +54,8 @@ const LocationSection = () => {
                   <div>
                     <h4 className="font-semibold text-primary">Email</h4>
                     <p className="text-muted-foreground">
-                      info@raygreenhotel.com<br />
-                      reservations@raygreenhotel.com
+                      
+                     reservations@raygreenhotel.com
                     </p>
                   </div>
                 </div>
