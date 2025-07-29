@@ -160,10 +160,57 @@ serve(async (req) => {
       }
     );
 
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error creating direct booking:", error);
+    
+    // Check if this is a duplicate booking error
+    if (error.message && error.message.includes("You already have a booking for these dates")) {
+      // Try to find the existing booking to provide helpful information
+      try {
+        const { data: existingBookings } = await supabaseClient
+          .from("bookings")
+          .select("booking_reference, check_in_date, check_out_date, status, total_price")
+          .eq("guest_email", bookingData.guestEmail)
+          .eq("room_type_id", bookingData.roomTypeId)
+          .in("status", ["pending", "confirmed"])
+          .gte("check_out_date", bookingData.checkInDate)
+          .lte("check_in_date", bookingData.checkOutDate)
+          .order("created_at", { ascending: false })
+          .limit(1);
+
+        if (existingBookings && existingBookings.length > 0) {
+          const existing = existingBookings[0];
+          return new Response(
+            JSON.stringify({
+              error: "Duplicate booking detected",
+              message: `You already have a ${existing.status} booking for these dates.`,
+              existingBooking: {
+                reference: existing.booking_reference,
+                checkIn: existing.check_in_date,
+                checkOut: existing.check_out_date,
+                status: existing.status,
+                totalPrice: existing.total_price
+              },
+              suggestion: existing.status === 'confirmed' 
+                ? "Your booking is confirmed. Check your email for confirmation details."
+                : "Your booking is pending. Please complete payment or contact support."
+            }),
+            {
+              status: 409, // Conflict status code
+              headers: { ...corsHeaders, "Content-Type": "application/json" },
+            }
+          );
+        }
+      } catch (lookupError) {
+        console.error("Error looking up existing booking:", lookupError);
+      }
+    }
+
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ 
+        error: error.message || "An unexpected error occurred",
+        details: error.code || "unknown_error"
+      }),
       {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 500,
