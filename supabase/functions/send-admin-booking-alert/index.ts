@@ -171,8 +171,8 @@ const handler = async (req: Request): Promise<Response> => {
     `;
 
     const emailResponse = await resend.emails.send({
-      from: "Ray Green Hotel <reservations@raygreenhotel.com>",
-      to: ["reservations@raygreenhotel.com"],
+      from: "Ray Green Hotel <reservations@raygreenhotel.org>",
+      to: ["reservations@raygreenhotel.org"],
       subject: `🏨 New Booking Alert - ${bookingReference} | ${guestName}`,
       html: htmlContent,
     });

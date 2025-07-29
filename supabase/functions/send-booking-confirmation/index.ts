@@ -136,7 +136,7 @@ const handler = async (req: Request): Promise<Response> => {
     `;
 
     const emailResponse = await resend.emails.send({
-      from: "Raygreen Hotel <noreply@resend.dev>",
+      from: "Ray Green Hotel <reservations@raygreenhotel.org>",
       to: [bookingData.guestEmail],
       subject: `Booking Confirmation - Raygreen Hotel (${bookingData.checkInDate})`,
       html: emailHtml,
