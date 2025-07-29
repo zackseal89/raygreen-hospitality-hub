@@ -55,9 +55,11 @@ export type Database = {
       }
       bookings: {
         Row: {
+          adults: number
           booking_reference: string | null
           check_in_date: string
           check_out_date: string
+          children: number
           created_at: string
           guest_email: string
           guest_name: string
@@ -74,9 +76,11 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
+          adults?: number
           booking_reference?: string | null
           check_in_date: string
           check_out_date: string
+          children?: number
           created_at?: string
           guest_email: string
           guest_name: string
@@ -93,9 +97,11 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
+          adults?: number
           booking_reference?: string | null
           check_in_date?: string
           check_out_date?: string
+          children?: number
           created_at?: string
           guest_email?: string
           guest_name?: string
