@@ -119,8 +119,8 @@ const handler = async (req: Request): Promise<Response> => {
 
             <div style="background: #2D5A27; color: white; padding: 25px; border-radius: 8px; text-align: center;">
               <h3 style="margin-top: 0;">Contact Information</h3>
-              <p style="margin: 5px 0;">📧 Email: info@raygreenhotel.com</p>
-              <p style="margin: 5px 0;">📞 Phone: +254 123 456 789</p>
+              <p style="margin: 5px 0;">📧 Email: reservations@raygreenhotel.com</p>
+              <p style="margin: 5px 0;">📞 Phone: +254 748 592 727</p>
               <p style="margin: 5px 0;">📍 Location: Kisumu, Kenya</p>
             </div>
 
