@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Layout from '@/components/layout/Layout';
-import { Users, Wifi, Coffee, Car, Tv, Wind, CheckCircle } from 'lucide-react';
+import { Users, Wifi, Coffee, Car, Tv, CheckCircle } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
