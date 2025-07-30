@@ -44,6 +44,7 @@ const Rooms = () => {
 
   const generalAmenities = [
     { icon: Wifi, label: 'Free WiFi' },
+    { icon: Wind, label: 'Air Conditioning' },
     { icon: Tv, label: 'Flat-screen TV' },
     { icon: Coffee, label: 'Room Service' },
     { icon: Car, label: 'Free Parking' }
