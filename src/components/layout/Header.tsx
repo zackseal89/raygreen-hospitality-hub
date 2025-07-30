@@ -61,7 +61,7 @@ const Header = () => {
               </div>
               <div className="flex items-center space-x-2">
                 <Mail className="h-4 w-4" />
-                <span>reservations@raygreenhotel.com</span>
+                <span>reservations@raygreenhotel.org</span>
               </div>
             </div>
             <div className="text-hotel-gold font-medium">

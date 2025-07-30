@@ -53,10 +53,10 @@ const LocationSection = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold text-primary">Email</h4>
-                    <p className="text-muted-foreground">
-                      
-                     reservations@raygreenhotel.com
-                    </p>
+                     <p className="text-muted-foreground">
+                       
+                      reservations@raygreenhotel.org
+                     </p>
                   </div>
                 </div>
 
