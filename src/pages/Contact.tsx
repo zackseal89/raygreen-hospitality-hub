@@ -99,7 +99,7 @@ const Contact = () => {
     {
       icon: Plane,
       title: "From Airport",
-      description: "Kisumu International Airport is 20 minutes away. We offer complimentary airport transfers for our guests.",
+      description: "Kisumu International Airport is 20 minutes away. We offer airport transfers at an affordable cost for our guests.",
       time: "20 minutes"
     },
   ];
