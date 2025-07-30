@@ -66,7 +66,7 @@ const Contact = () => {
     {
       icon: Phone,
       title: "Phone",
-      details: ["+254 748 592 727", "+254 987 654 321"],
+      details: ["+254 748 592 727", "+254 756 666 999"],
       description: "Available 24/7 for reservations and inquiries"
     },
     {
