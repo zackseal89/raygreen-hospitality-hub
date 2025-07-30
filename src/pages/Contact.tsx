@@ -72,7 +72,7 @@ const Contact = () => {
     {
       icon: Mail,
       title: "Email",
-      details: ["reservations@raygreenhotel.com", "info@raygreenhotel.com"],
+      details: ["reservations@raygreenhotel.com"],
       description: "We typically respond within 2-4 hours"
     },
     {
