@@ -142,7 +142,10 @@ const Rooms = () => {
                   <div className="mb-6">
                     <h4 className="font-semibold text-primary mb-3">Room Amenities</h4>
                     <div className="space-y-2">
-                      {room.amenities.slice(0, 6).map((amenity) => (
+                    {room.amenities
+                      .filter(amenity => !amenity.toLowerCase().includes('air conditioning') && !amenity.toLowerCase().includes('ac'))
+                      .slice(0, 6)
+                      .map((amenity) => (
                         <div key={amenity} className="flex items-center space-x-2">
                           <CheckCircle className="h-4 w-4 text-hotel-green" />
                           <span className="text-sm">{amenity}</span>
