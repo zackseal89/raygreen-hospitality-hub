@@ -164,6 +164,29 @@ const Facilities = () => {
                   </h2>
                 </div>
 
+                {/* Conference room images - show only for Conference & Events category */}
+                {category.category === "Conference & Events" && (
+                  <div className="mb-8">
+                    <h3 className="text-2xl font-bold text-primary mb-6 text-center">Our Conference Facilities</h3>
+                    <div className="grid md:grid-cols-2 gap-6 mb-8">
+                      <div className="rounded-lg overflow-hidden shadow-lg">
+                        <img 
+                          src="/lovable-uploads/dc2f400f-7dd2-4335-9a78-4a56b4b22a79.png" 
+                          alt="Conference room setup with water bottles and notepads"
+                          className="w-full h-64 object-cover hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+                      <div className="rounded-lg overflow-hidden shadow-lg">
+                        <img 
+                          src="/lovable-uploads/9eb5d33e-7fff-4fe2-b311-889b01c6b388.png" 
+                          alt="Large conference hall with red chairs and professional setup"
+                          className="w-full h-64 object-cover hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 <div className="grid lg:grid-cols-2 gap-8">
                   {category.items.map((facility, index) => (
                     <Card 
