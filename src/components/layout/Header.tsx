@@ -76,14 +76,12 @@ const Header = () => {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <Link to="/" className="flex items-center space-x-2">
-              <div className="bg-gradient-hero text-primary-foreground rounded-lg p-2">
-                <span className="font-bold text-lg">RG</span>
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-primary">Raygreen Hotel</h1>
-                <p className="text-xs text-hotel-gold">Best African Hospitality</p>
-              </div>
+            <Link to="/" className="flex items-center space-x-3">
+              <img 
+                src="/lovable-uploads/b6adf3a6-718b-4728-a661-323b09bded56.png" 
+                alt="Raygreen Hotel Logo"
+                className="h-12 w-auto"
+              />
             </Link>
 
             {/* Desktop Navigation */}
@@ -117,14 +115,12 @@ const Header = () => {
               </SheetTrigger>
               <SheetContent side="right" className="w-72">
                 <div className="flex flex-col space-y-6 mt-6">
-                  <Link to="/" onClick={() => setIsOpen(false)} className="flex items-center space-x-2">
-                    <div className="bg-gradient-hero text-primary-foreground rounded-lg p-2">
-                      <span className="font-bold text-sm">RG</span>
-                    </div>
-                    <div>
-                      <h2 className="font-bold text-primary">Raygreen Hotel</h2>
-                      <p className="text-xs text-hotel-gold">Best African Hospitality</p>
-                    </div>
+                  <Link to="/" onClick={() => setIsOpen(false)} className="flex items-center space-x-3">
+                    <img 
+                      src="/lovable-uploads/b6adf3a6-718b-4728-a661-323b09bded56.png" 
+                      alt="Raygreen Hotel Logo"
+                      className="h-10 w-auto"
+                    />
                   </Link>
                   
                   <nav className="flex flex-col space-y-4">
